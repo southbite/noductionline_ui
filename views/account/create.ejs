@@ -1,0 +1,49 @@
+<style type="text/css">
+body {
+  padding-top: 40px;
+  padding-bottom: 40px;
+  background-color: #f5f5f5;
+}
+
+.form-createaccount {
+  max-width: 300px;
+  padding: 19px 29px 29px;
+  margin: 0 auto 20px;
+  background-color: #fff;
+  border: 1px solid #e5e5e5;
+  -webkit-border-radius: 5px;
+     -moz-border-radius: 5px;
+          border-radius: 5px;
+  -webkit-box-shadow: 0 1px 2px rgba(0,0,0,.05);
+     -moz-box-shadow: 0 1px 2px rgba(0,0,0,.05);
+          box-shadow: 0 1px 2px rgba(0,0,0,.05);
+}
+.form-createaccount .form-createaccount-heading,
+.form-createaccount .checkbox {
+  margin-bottom: 10px;
+}
+.form-createaccount input[type="text"],
+.form-createaccount input[type="password"] {
+  font-size: 16px;
+  height: auto;
+  margin-bottom: 15px;
+  padding: 7px 9px;
+}
+
+</style>
+
+<div class="container">
+
+<form class="form-createaccount" method="POST" action="/account/confirm" enctype="application/x-www-form-urlencoded" id="create-account-form">
+  <h2 class="form-createaccount-heading">Create account</h2>
+  
+  <h4 class="form-createaccount-heading">Account details</h4>
+  <input type="text" class="input-block-level" placeholder="Account name" id="account_name" name="account_name">
+  <input type="text" class="input-block-level" placeholder="Account description" id="account_description" name="account_description">
+  <h4 class="form-createaccount-heading">Account owner details</h4>
+  <input type="text" class="input-block-level" placeholder="Owner Email address" id="user_email" name="user_email">
+  <input type="password" class="input-block-level" placeholder="Owner Password" id="user_password" name="user_password">
+  <button class="btn btn-large btn-primary" type="submit">Create</button>
+</form>
+
+</div>

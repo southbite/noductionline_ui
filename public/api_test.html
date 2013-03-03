@@ -1,0 +1,49 @@
+<html>
+<head>
+
+<script src="/js/jquery-min.js"></script>
+<script src="/js/jquery.easyui.min.js"></script>
+<script src="/js/application.js"></script>
+<link href="/css/noductionstyle.css" rel="stylesheet">
+
+</head>
+<body>
+	<script>
+	var testLog = "";
+	
+	 $(document).ready(function() {
+		  
+		try
+		{
+			postData("http://localhost:3001/request_access", {}, function(resp){
+				console.log(resp);
+				addTestLog("Authtoken passed back " + resp);
+				getData("http://localhost:3001/Account?ACCESSTOKEN=" + resp, function(resp){
+					
+					console.log(resp);
+					addTestLog("Test data passed back " + JSON.stringify(resp));
+
+					
+				});
+				
+			});
+		}
+		catch(err)
+		{
+			testLog += "Failure: " + err.toString() + "\r\n"
+		}
+	 }); 
+	 
+	 $('#testLog').html(testLog);
+	 
+	 function addTestLog(log)
+	 {
+		 testLog += new Date().toString() + " " + log + "<br>";
+	 }
+	 
+</script>
+<div id="testLog">
+	
+</div>
+</body>
+</html>
