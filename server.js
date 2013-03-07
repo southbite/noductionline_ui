@@ -5,6 +5,11 @@ broker = require('./broker');
 
 var app = express();
 
+app.locals.tag = require('./controllers/helper').tag;
+
+console.log('app.locals.helper');
+console.log(app.locals.helper);
+
 app.use(express.bodyParser());
 app.use(expressLayouts);
 app.use(express.static(__dirname+'/public'));

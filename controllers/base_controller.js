@@ -1,6 +1,10 @@
 exports.render = function(res, view, parameters, layout)
 {
-	parameters['helper'] = this.helper;
+	console.log('parameters');
+	console.log(parameters);
+	
+	if (parameters == null)
+		parameters = {};
 	
 	if (layout == null)
 		layout = '../views/layout.ejs';

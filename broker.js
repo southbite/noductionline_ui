@@ -1,6 +1,5 @@
 var settings = require('./settings');
 var controller_cache = {};
-var controller_helper = require('./controllers/helper');
 
 exports.execute_controller = function(req, res, done){
 	try
@@ -46,8 +45,9 @@ function getController(controllerName)
 		var baseController = require('./controllers/base_controller');
 		
 		controllerInstance.api_url = settings.getSetting('api_url');
-		controllerInstance.helper = controller_helper;
+		//controllerInstance.helper = controller_helper;
 		controllerInstance.name = controllerName;
+		controllerInstance.settings = settings;
 		
 		for (var methodPointer in baseController)
 		{
@@ -61,12 +61,4 @@ function getController(controllerName)
 	console.log(controller_cache[controllerName]);
 	
 	return controller_cache[controllerName];
-}
-
-function bindHelperMethods(controllerInstance, helper_methods)
-{
-	for (var methodName in helper_methods)
-	{
-		controllerInstance['helper'] = helper;
-	}
 }

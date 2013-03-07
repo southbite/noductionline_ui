@@ -8,6 +8,24 @@ exports.create = function(req, res, done){
 	this.render(res, 'create', {});
 }.bind(this);
 
+exports.confirm_complete = function(req, res, done){
+	
+	var request = require('request');
+	var api_call_url = this.api_url + '/auth/confirm_account?account=' + req.query['account'] + '&user=' + req.query['user'];
+	
+	request.get(api_call_url, function(error, response, body){
+		
+		console.log('back from ' + api_call_url);
+		//console.log(error);
+		//console.log(response);
+		console.log(body);
+		
+		res.redirect('/auth/login');
+		
+	}.bind(this));
+	
+}.bind(this);
+
 exports.confirm = function(req, res, done){
 	
 	var createAccountPost = {};
@@ -21,6 +39,7 @@ exports.confirm = function(req, res, done){
 	createAccountPost['account_description'] = req.body['account_description'];
 	createAccountPost['user_email'] = req.body['user_email'];
 	createAccountPost['user_password'] = req.body['user_password'];
+	createAccountPost['confirm_url'] = this.settings.getSetting('account_confirm_url');
 	
 	console.log(createAccountPost);
 	console.log('createAccountPost');
@@ -33,11 +52,16 @@ exports.confirm = function(req, res, done){
 	request.post(this.api_url + '/auth/create_account', {form:createAccountPost}, function(error, response, body){
 		
 		console.log('back from ' + api_call_url);
-		//console.log(error);
-		//console.log(response);
-		console.log(body);
+		var sresponse = JSON.parse(body);
 		
-		this.render(res, 'confirmed', {});
+		console.log(sresponse.status);
+		console.log(sresponse.message);
+		
+		if (sresponse.status == "SUCCESSFUL")
+			this.render(res, 'confirm', sresponse['data']);
+		else
+			this.render(res, 'create', sresponse['data']);
+		
 		
 	}.bind(this));
 	

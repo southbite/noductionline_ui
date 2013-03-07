@@ -1,6 +1,3 @@
-<%- helper.tag('js','jquery-min,jquery.easyui.min,application,bootstrap.min') %>
-<%- helper.tag('css','noductionstyle,bootstrap-responsive.min,bootstrap.min') %>
-
 <style type="text/css">
 body {
   padding-top: 40px;
@@ -35,18 +32,28 @@ body {
 
 </style>
 
-<div class="container">
+<script>
 
-<form class="form-createaccount" method="POST" action="/account/confirm">
-  <h2 class="form-createaccount-heading">Create account</h2>
+function submitConfirm()
+{
+	var confirmCode = $('#txt_confirm_code').val();
+	
+	if (confirmCode != "Confirmation code")
+	{
+		$('#confirm_frm').attr('action', '/account/confirm_complete?account=' + confirmCode + '&user=<%- user  %>';
+		$('#confirm_frm').submit();
+	}
+}
+
+</script>
+
+<div class="container">
+<form class="form-confirm" method="POST" action="/account/confirm_complete" id="confirm_frm">
+  <h2 class="form-createaccount-heading">Account creation complete, you will be sent an email</h2>
   
-  <h4 class="form-createaccount-heading">Account details</h4>
-  <input type="text" class="input-block-level" placeholder="Account name">
-  <input type="text" class="input-block-level" placeholder="Account description">
-  <h4 class="form-createaccount-heading">Account owner details</h4>
-  <input type="text" class="input-block-level" placeholder="Owner Email address">
-  <input type="password" class="input-block-level" placeholder="Owner Password">
-  <button class="btn btn-large btn-primary" type="submit">Create</button>
+  <input type="text" class="input-block-level" placeholder="Confirmation code" id="txt_confirm_code"></input>
+  <button class="btn btn-large btn-primary" type="submit" onclick="submitConfirm()">Create</button>
 </form>
 
 </div>
+
