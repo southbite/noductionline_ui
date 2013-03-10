@@ -5,10 +5,16 @@ broker = require('./broker');
 
 var app = express();
 
+/*
 app.locals.tag = require('./controllers/helper').tag;
+app.locals.tryParseJSON = require('./controllers/helper').tryParseJSON;
+*/
 
-console.log('app.locals.helper');
-console.log(app.locals.helper);
+var helperCode = require('./controllers/helper');
+for (var fPointer in helperCode)
+{
+	app.locals[fPointer] = helperCode[fPointer];
+}
 
 app.use(express.bodyParser());
 app.use(expressLayouts);

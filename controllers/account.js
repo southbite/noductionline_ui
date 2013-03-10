@@ -11,9 +11,13 @@ exports.create = function(req, res, done){
 exports.confirm_complete = function(req, res, done){
 	
 	var request = require('request');
+	
+	console.log(req.query['account']);
+	console.log(req.query['user']);
+	
 	var api_call_url = this.api_url + '/auth/confirm_account?account=' + req.query['account'] + '&user=' + req.query['user'];
 	
-	request.get(api_call_url, function(error, response, body){
+	request.post(api_call_url, function(error, response, body){
 		
 		console.log('back from ' + api_call_url);
 		//console.log(error);
@@ -52,7 +56,8 @@ exports.confirm = function(req, res, done){
 	request.post(this.api_url + '/auth/create_account', {form:createAccountPost}, function(error, response, body){
 		
 		console.log('back from ' + api_call_url);
-		var sresponse = JSON.parse(body);
+		console.log(body);
+		var sresponse = this.helper.tryParseJSON(body);
 		
 		console.log(sresponse.status);
 		console.log(sresponse.message);

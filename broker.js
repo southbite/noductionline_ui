@@ -1,5 +1,6 @@
 var settings = require('./settings');
 var controller_cache = {};
+var controller_helper = require('./controllers/helper');
 
 exports.execute_controller = function(req, res, done){
 	try
@@ -45,7 +46,7 @@ function getController(controllerName)
 		var baseController = require('./controllers/base_controller');
 		
 		controllerInstance.api_url = settings.getSetting('api_url');
-		//controllerInstance.helper = controller_helper;
+		controllerInstance.helper = controller_helper;
 		controllerInstance.name = controllerName;
 		controllerInstance.settings = settings;
 		

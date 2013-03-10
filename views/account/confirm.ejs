@@ -40,7 +40,10 @@ function submitConfirm()
 	
 	if (confirmCode != "Confirmation code")
 	{
-		$('#confirm_frm').attr('action', '/account/confirm_complete?account=' + confirmCode + '&user=<%- user  %>';
+		$('#confirm_frm').attr('action', '/account/confirm_complete?account=' + confirmCode + '&user=<%- user  %>');
+		
+		console.log($('#confirm_frm').attr('action'));
+		
 		$('#confirm_frm').submit();
 	}
 }
@@ -48,11 +51,11 @@ function submitConfirm()
 </script>
 
 <div class="container">
-<form class="form-confirm" method="POST" action="/account/confirm_complete" id="confirm_frm">
+<form class="form-confirm" method="POST" id="confirm_frm">
   <h2 class="form-createaccount-heading">Account creation complete, you will be sent an email</h2>
   
   <input type="text" class="input-block-level" placeholder="Confirmation code" id="txt_confirm_code"></input>
-  <button class="btn btn-large btn-primary" type="submit" onclick="submitConfirm()">Create</button>
+  <button class="btn btn-large btn-primary" type="submit" onclick="submitConfirm()">Confirm</button>
 </form>
 
 </div>

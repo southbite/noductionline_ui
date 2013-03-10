@@ -20,3 +20,16 @@ exports.tag = function(type, commaSeparated)
 	
 	return renderedHtml;
 }
+
+exports.tryParseJSON = function(jsonString)
+{
+	try
+	{
+		return JSON.parse(jsonString);
+	}
+	catch(e)
+	{
+		return {result:'err',message:e};
+	}
+	
+}
