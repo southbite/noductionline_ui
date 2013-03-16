@@ -32,16 +32,43 @@ body {
 
 </style>
 
+<script>
+
+function login()
+{
+	var api_client = new noductionline_api_client();
+	api_client.api_url = '<%- api_url  %>';
+	api_client.rest_client = new jquery_rest_client();
+	
+	console.log('performing login');
+	
+	api_client.login($('#email').val(),$('#pwd').val(), function(err, sessionObj){
+		
+		console.log(err);
+		console.log(sessionObj);
+		
+		if (err)
+			flash(err, 'error', 5000);
+		else
+		{
+			console.log('successful');
+			window.location.href = '/account/available?session_token=' + sessionObj.key;
+		}
+	});
+}
+
+</script>
+
 <div class="container">
 
-<form class="form-signin" method="post" action="/auth/authenticate">
+<div class="form-signin">
   <h2 class="form-signin-heading">Please sign in</h2>
-  <input type="text" class="input-block-level" placeholder="Email address">
-  <input type="password" class="input-block-level" placeholder="Password">
+  <input type="text" class="input-block-level" placeholder="Email address" id="email">
+  <input type="password" class="input-block-level" placeholder="Password" id="pwd">
   <label class="checkbox">
     <input type="checkbox" value="remember-me"> Remember me
   </label>
-  <button class="btn btn-large btn-primary" type="submit">Sign in</button>
-</form>
+  <button class="btn btn-large btn-primary" type="submit" onclick="login();">Sign in</button>
+</div>
 
 </div>

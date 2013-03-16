@@ -8,6 +8,12 @@ exports.create = function(req, res, done){
 	this.render(res, 'create', {});
 }.bind(this);
 
+exports.available = function(req, res, done){
+	var session_token = req.query['session_token'];
+	console.log('rendering');
+	this.render(res, 'available', {session_token:session_token});
+}.bind(this);
+
 exports.confirm_complete = function(req, res, done){
 	
 	var request = require('request');

@@ -1,7 +1,7 @@
 <html>
 <head>
 
-<%- tag('js','jquery-min,jquery.easyui.min,application,bootstrap.min') %>
+<%- tag('js','jquery-min,jquery.easyui.min,application,bootstrap.min,noductionline_api_client') %>
 <%- tag('css','noductionstyle,bootstrap.min') %>
 
 <style type="text/css">
@@ -75,6 +75,18 @@ body {
   border-radius: 0 3px 3px 0;
 }
 </style>
+
+<script>
+
+/*
+  info,error,warning,success
+ */
+function flash(message,type,fadeDuration)
+{
+	showMessage(message, type, fadeDuration);
+}
+
+</script>
 
 </head>
 <body>
