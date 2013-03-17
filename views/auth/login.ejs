@@ -52,7 +52,8 @@ function login()
 		else
 		{
 			console.log('successful');
-			window.location.href = '/account/available?session_token=' + sessionObj.key;
+			$.cookie('noductionline_session',  serializeJSON(sessionObj));
+			window.location.href = '/account/available';
 		}
 	});
 }

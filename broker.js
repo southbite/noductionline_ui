@@ -55,6 +55,8 @@ function getController(controllerName)
 			controllerInstance[methodPointer] = baseController[methodPointer].bind(controllerInstance);
 		}
 			
+		controllerInstance.default_render_parameters['api_url'] = settings.getSetting('api_url')
+		
 		controller_cache[controllerName] = controllerInstance;
 	}
 	

@@ -9,9 +9,7 @@ exports.create = function(req, res, done){
 }.bind(this);
 
 exports.available = function(req, res, done){
-	var session_token = req.query['session_token'];
-	console.log('rendering');
-	this.render(res, 'available', {session_token:session_token});
+	this.render(res, 'available', {});
 }.bind(this);
 
 exports.confirm_complete = function(req, res, done){
