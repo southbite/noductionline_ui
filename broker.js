@@ -52,7 +52,10 @@ function getController(controllerName)
 		
 		for (var methodPointer in baseController)
 		{
-			controllerInstance[methodPointer] = baseController[methodPointer].bind(controllerInstance);
+			if (baseController[methodPointer]['bind'])
+				controllerInstance[methodPointer] = baseController[methodPointer].bind(controllerInstance);
+			else
+				controllerInstance[methodPointer] = baseController[methodPointer];
 		}
 			
 		controllerInstance.default_render_parameters['api_url'] = settings.getSetting('api_url')

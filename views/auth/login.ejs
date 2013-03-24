@@ -52,7 +52,11 @@ function login()
 		else
 		{
 			console.log('successful');
-			$.cookie('noductionline_session',  serializeJSON(sessionObj));
+			setSession(sessionObj);
+			
+			
+			console.log(getSession());
+
 			window.location.href = '/account/available';
 		}
 	});

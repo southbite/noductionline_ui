@@ -78,6 +78,8 @@ body {
 
 <script>
 
+var onReadyAPIEvent = null;
+
 $(document).ready(function() {
 	try
 	{
@@ -105,9 +107,18 @@ function flash(message,type,fadeDuration)
 	showMessage(message, type, fadeDuration);
 }
 
+function setSession(sessionObj)
+{
+	var serialized = serializeJSON(sessionObj);
+	console.log(serialized);//, 1, { path : "/" }
+	$.cookie('noductionline_session', serialized, { path : "/" });
+}
+
 function getSession()
 {
-	deserializeJSON($.cookie('noductionline_session'));
+	console.log('session obj');
+	console.log($.cookie('noductionline_session'));
+	return deserializeJSON($.cookie('noductionline_session'));
 }
 
 </script>
