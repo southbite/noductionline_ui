@@ -25,17 +25,23 @@ jquery_rest_client.prototype = {
 			data: body,
 			success: function (response) {
 				console.log(response);
-				onResponse(response);
+				onResponse(null, response);
+			},
+			error: function(req, status, message){
+				onResponse(status + ":" + message, null);
 			}
 		});
 	},
-	get:function(pURL, body, onResponse)
+	get:function(pURL, onResponse)
 	{
 		$.ajax({
 			type: "GET",
 			url: pURL,
 			success: function (response) {
-				onResponse(response);
+				onResponse(null, response);
+			},
+			error: function(req, status, message){
+				onResponse(status + ":" + message, null);
 			}
 		});
 	},
@@ -46,7 +52,10 @@ jquery_rest_client.prototype = {
 			url: pURL,
 			data: body,
 			success: function (response) {
-				onResponse(response);
+				onResponse(null, response);
+			},
+			error: function(req, status, message){
+				onResponse(status + ":" + message, null);
 			}
 		});
 	},
@@ -57,7 +66,10 @@ jquery_rest_client.prototype = {
 			url: pURL,
 			data: body,
 			success: function (response) {
-				onResponse(response);
+				onResponse(null, response);
+			},
+			error: function(req, status, message){
+				onResponse(status + ":" + message, null);
 			}
 		});
 	}
@@ -88,25 +100,47 @@ noductionline_api_client.prototype = {
 	login:function(usr, pwd, done){
 		this.validate(false);
 		
-		this.rest_client.post(this.api_url + '/auth/login', {user_email:usr, pwd:pwd}, function(response){
+		this.rest_client.post(this.api_url + '/auth/login', {user_email:usr, pwd:pwd}, function(err, response){
 			
-			console.log(response);
-			
-			if (response.status == 'SUCCESS')
+			if (!err)
 			{
-				this.session_key = response.data['key'];
-				done(null, response.data);
+				if (response.status == 'SUCCESS')
+				{
+					this.session_key = response.data['key'];
+					done(null, response.data);
+				}
+				else
+				{
+					done(response);
+				}
 			}
 			else
-			{
-				done(response);
-			}
-				
+				throw err;
+			
 		});
 	},
 	get_available_accounts:function(done)
 	{
 		this.validate(true);
+		
+		this.rest_client.post(this.api_url + 'auth/available_accounts?SESSIONTOKEN=' + this.session_key, {user_email:usr, pwd:pwd}, function(err, response){
+			
+			if (!err)
+			{
+				if (response.status == 'SUCCESS')
+				{
+					this.session_key = response.data['key'];
+					done(null, response.data);
+				}
+				else
+				{
+					done(response);
+				}
+			}
+			else
+				throw err;
+			
+		});
 		
 	},
 	find:function(account_id, type, criteria, done)
