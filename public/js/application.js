@@ -394,6 +394,29 @@ function flashMessage(message, fade, modal)
 	
 }
 
+function modalWindow(header, url, width, height)
+{
+	var modalWindow = "";
+	modalWindow = '<div id="app_model_window" style="width:' + width.toString() + 'px;height:' + height.toString() + 'px" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">';
+	modalWindow += '<div class="modal-header">';
+    modalWindow += '<button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>';
+    modalWindow += header;
+	modalWindow += '</div>';
+	modalWindow += '<div class="modal-body">';
+	modalWindow += '<p>One fine body…</p>';
+	modalWindow += '</div>';
+	modalWindow += '<div class="modal-footer">';
+	modalWindow += '<button class="btn" data-dismiss="modal" aria-hidden="true">Close</button>';
+	modalWindow += '<button class="btn btn-primary">Save changes</button>';
+	modalWindow += '</div>';
+	modalWindow += '</div>';
+	
+	$('body').remove('#app_model_window');
+	$('body').append(modalWindow);
+	
+	$('#app_model_window').modal();
+}
+
 function menu()
 {
 	
