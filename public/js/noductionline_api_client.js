@@ -104,7 +104,7 @@ noductionline_api_client.prototype = {
 			
 			if (!err)
 			{
-				if (response.status == 'SUCCESS')
+				if (response.status == 'SUCCESSFUL')
 				{
 					this.session_key = response.data['key'];
 					done(null, response.data);
@@ -123,13 +123,17 @@ noductionline_api_client.prototype = {
 	{
 		this.validate(true);
 		
-		this.rest_client.post(this.api_url + 'auth/available_accounts?SESSIONTOKEN=' + this.session_key, {user_email:usr, pwd:pwd}, function(err, response){
+		this.rest_client.get(this.api_url + '/auth/available_accounts?SESSIONTOKEN=' + this.session_key, function(err, response){
 			
+			console.log('made call');
+			console.log(err);
+			console.log(response);
 			if (!err)
 			{
-				if (response.status == 'SUCCESS')
+				if (response.status == 'SUCCESSFUL')
 				{
-					this.session_key = response.data['key'];
+					console.log(response);
+					//this.session_key = response.data['key'];
 					done(null, response.data);
 				}
 				else

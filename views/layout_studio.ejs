@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html>
+<head>
+
+<style>
+
+body,html{
+	  height:100%;
+}
+
+</style>
+
+<script>
+var api_url = '<%- api_url  %>';
+</script>
+
+<%- tag('js','jquery-min,api_client_page,jquery.easyui.min,application,bootstrap.min,noductionline_api_client,jquery.cookie,mustache,underscore') %>
+<%- tag('css','noductionstyle,bootstrap.min,bootstrap-responsive.min') %>
+
+<script>
+
+onDocumentReadyEvent = function(){
+	refreshSessionStatus();
+}
+
+function refreshSessionStatus()
+{
+	var session = getSession();
+	
+	console.log(session);
+	
+	var session_status = "<span>Logged in as " + session.user.emailaddress + ", <a href=\"/auth/logout\">logout</a></span>";
+	
+	if (session['account'] != null)
+		session_status = "<span>Logged in account " + session['account'].name + " as " + session.user.emailaddress + "<br><a href=\"/auth/logout\">logout</a> or <a href=\"/account/available\">switch accounts</a></span>";
+	
+	$('#div_session_status').html(session_status);
+}
+
+
+</script>
+
+</head>
+<body>
+
+<div class="container-fluid">
+	<div class="row-fluid">
+		<div class="span8">
+		<h3 class="muted">Noductionline Studio</h3>
+		</div>
+		<div class="span4">
+			<div id="div_session_status" name="div_session_status">
+			</div>
+		</div>
+	</div>
+	<div class="row-fluid">
+	<%-body%>
+	</div>
+</div>
+<div id="outer_message_div" class="message_container"><div class="message_container_inner" id="inner_message_div"><table class="message_container_table"><tr><td class="message_container_text">Test Message</td></tr></table>
+</div>
+</body>
+</html>

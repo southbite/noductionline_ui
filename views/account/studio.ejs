@@ -1,0 +1,108 @@
+<div class="span3">
+	<div class="accordion" id="accordion2" style="height:100%">
+	<div class="accordion-group">
+	    <div class="accordion-heading">
+	        <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion2" href="#collapseOne">
+	            <h4>Workshop</h4>
+	        </a>
+	    </div>
+	    <div id="collapseOne" class="accordion-body collapse in">
+	        <div class="accordion-inner">
+	        	<div class="sidemenu_container_tools" id="div_sidemenu_workshop_tools">
+		        	<div class="btn-group">
+		        	  <a class="btn dropdown-toggle" data-toggle="dropdown" href="#">
+		        	    New
+		        	    <span class="caret"></span>
+		        	  </a>
+		        	  <ul class="dropdown-menu">
+		        	   	<li><a onclick="newProject()" href="#">Project</a></li>
+		        	   	<li><a onclick="newBlueprint()" href="#">Blueprint</a></li>
+		        	   	<li><a onclick="newProject()" href="#">Processor</a></li>
+		        	   	<li><a onclick="newProject()" href="#">Component</a></li>
+		        	   	<li><a onclick="newSchematic()" href="#">Schematic</a></li>
+		        	  </ul>
+		        	</div>
+	        	</div>
+	            <div class="sidemenu_container" id="div_sidemenu_workshop"></div>
+	        </div>
+	    </div>
+	</div>
+	<div class="accordion-group">
+	    <div class="accordion-heading">
+	        <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion2" href="#collapseTwo">
+	        	<h4>Factory</h4>
+	        </a>
+	    </div>
+	    <div id="collapseTwo" class="accordion-body collapse">
+	        <div class="accordion-inner">
+	        	<div class="sidemenu_container" id="div_sidemenu_factory"></div>
+	        </div>
+	    </div>
+	</div>
+	<div class="accordion-group">
+	    <div class="accordion-heading">
+	        <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion2" href="#collapseThree">
+	        	<h4>Warehouse</h4>
+	        </a>
+	    </div>
+	    <div id="collapseThree" class="accordion-body collapse">
+	        <div class="accordion-inner">
+	        	<div class="sidemenu_container" id="div_sidemenu_warehouse"></div>
+	        </div>
+	    </div>
+	</div>
+	<div class="accordion-group">
+    <div class="accordion-heading">
+        <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion2" href="#collapseFour">
+        	<h4>Personnel</h4>
+        </a>
+    </div>
+    <div id="collapseFour" class="accordion-body collapse">
+        <div class="accordion-inner">
+        	<div class="sidemenu_container" id="div_sidemenu_personnel"></div>
+        </div>
+    </div>
+</div>
+	</div>
+</div>
+
+<div class="span9">
+    <div class="content-tabheaders">
+	   <ul class="nav nav-tabs">
+	    <li class="active">
+	      <a href="#">Dashboard</a>
+	    </li>
+	    <!--
+	    <li><a href="#">...</a></li>
+	    <li><a href="#">...</a></li>
+	    -->
+	  </ul>
+    </div>
+    <div class="content-container"></div>
+</div>
+
+<script>
+
+onReadyAPIEvent = function(api_client)
+{
+	var session = getSession();
+	var account_id = '<%- account_id  %>';
+	
+	$(window).resize(function() {
+	    $('.content-container').height($(window).height() - 130);
+	});
+
+	$(window).trigger('resize');
+}
+
+function openTab(url)
+{
+	
+}
+
+function newProject()
+{
+	
+}
+
+</script>

@@ -1,13 +1,56 @@
 <script>
+var availableAccounts = null;
 
 onReadyAPIEvent = function(api_client)
 {
 	var session = getSession();
+	var accountsMenu = new menu();
+
 	
 	console.log(session);
 	//(pURL, body, onResponse)
 	
-	api_client.get()
+	
+	api_client.get_available_accounts(function(err, accounts){
+		
+		if (!err)
+		{
+			console.log(accounts);
+			availableAccounts = accounts;
+			//populate:function(container, items, onItemClicked, itemHeading, itemDescription, itemId, itemImage)
+			accountsMenu.populate('available_accounts_menu', accounts, 'availableClicked', '<h4 class="muted">{{name}}<h4> <p class="item-description">{{description}}</p>', '_id');
+		}
+		
+		
+	});
+}
+
+function availableClicked(accountId)
+{
+	console.log('available clicked ' + accountId);
+	
+	var session = getSession();
+	var account = _.findWhere(availableAccounts, {_id:accountId});
+	
+	console.log('found acc');
+	console.log(account);
+	
+	session['account'] = account;
+	
+	setSession(session);
+	
+	window.location.href = "/account/studio?account=" + accountId;
 }
 
 </script>
+
+<div class="span12">
+	<center style="height:100%">
+	<div style="width:600px;" class="container-panel">
+		<div class="container-panel-heading"><h3>Available accounts</h3></div>
+		<div class="container-panel-inner" id="available_accounts_menu"></div>
+	</div>
+	</center>
+</div>
+
+

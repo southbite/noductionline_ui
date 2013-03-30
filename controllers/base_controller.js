@@ -16,6 +16,8 @@ exports.render = function(res, view, parameters, layout)
 	
 	if (layout == null)
 		layout = '../views/layout.ejs';
+	else
+		layout = '../views/' + layout + '.ejs';
 	
 	parameters['layout'] = layout;
 	

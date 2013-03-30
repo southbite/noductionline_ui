@@ -1,3 +1,11 @@
+exports.studio = function(req, res, done){
+	var account_id = req.query['account'];
+	
+	console.log('rendering account studio: ' + account_id);
+	
+	this.render(res, 'studio', {'account_id':account_id}, 'layout_studio');
+}.bind(this);
+
 
 exports.design = function(req, res, done){
 	this.render(res, 'design', {});
@@ -9,7 +17,7 @@ exports.create = function(req, res, done){
 }.bind(this);
 
 exports.available = function(req, res, done){
-	this.render(res, 'available', {});
+	this.render(res, 'available', {}, 'layout_studio');
 }.bind(this);
 
 exports.confirm_complete = function(req, res, done){

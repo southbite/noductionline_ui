@@ -1,8 +1,15 @@
+<!DOCTYPE html>
 <html>
 <head>
 
-<%- helper.tag('js','jquery-min,jquery.easyui.min,application,bootstrap.min') %>
-<%- helper.tag('css','noductionstyle,bootstrap-responsive.min,bootstrap.min') %>
+<script>
+var api_url = '<%- api_url  %>';
+</script>
+
+<%- tag('js','jquery-min,api_client_page,jquery.easyui.min,application,bootstrap.min,noductionline_api_client,jquery.cookie,mustache,underscore') %>
+<%- tag('css','noductionstyle,bootstrap.min,bootstrap-responsive.min') %>
+
+
 
 </head>
 <body>
