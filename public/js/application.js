@@ -394,20 +394,34 @@ function flashMessage(message, fade, modal)
 	
 }
 
-function modalWindow(header, url, width, height)
+function modalWindowHide()
 {
+	$('#app_model_window').modal('hide');
+}
+
+function modalWindow(header, url, width, height, okFunction, okButton, cancelButton)
+{
+	if (!okButton)
+		okButton = 'OK';
+	
+	
+	if (!cancelButton)
+		cancelButton = 'Cancel';
+	
 	var modalWindow = "";
 	modalWindow = '<div id="app_model_window" style="width:' + width.toString() + 'px;height:' + height.toString() + 'px" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">';
+	modalWindow += '<div style="width:100%;height:100%;position:relative">';
 	modalWindow += '<div class="modal-header">';
     modalWindow += '<button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>';
     modalWindow += header;
 	modalWindow += '</div>';
 	modalWindow += '<div class="modal-body">';
-	modalWindow += '<p>One fine body…</p>';
+	modalWindow += '<iframe id="modalWindow_frame" src="' + url + '" style="width:100%;height:' + (height - 210) + 'px;border:none"></iframe>';
 	modalWindow += '</div>';
-	modalWindow += '<div class="modal-footer">';
-	modalWindow += '<button class="btn" data-dismiss="modal" aria-hidden="true">Close</button>';
-	modalWindow += '<button class="btn btn-primary">Save changes</button>';
+	modalWindow += '<div class="modal-footer" style="position:absolute;bottom:0;width:' + (width - 30).toString() + 'px">';
+	modalWindow += '<button class="btn" data-dismiss="modal" aria-hidden="true">' + cancelButton + '</button>';
+	modalWindow += '<button class="btn btn-primary" onclick="document.getElementById(\'modalWindow_frame\').contentWindow.' + okFunction + '();">' + okButton + '</button>';
+	modalWindow += '</div>';
 	modalWindow += '</div>';
 	modalWindow += '</div>';
 	

@@ -1,0 +1,40 @@
+<form class="form-horizontal">
+  <div class="control-group">
+    <label class="control-label" for="ctl_project_name">Name</label>
+    <div class="controls">
+    	<input id="ctl_project_name" class="input-xlarge" type="text" placeholder="Name">
+    </div>
+  </div>
+  <div class="control-group">
+    <label class="control-label" for="ctl_project_description">Description</label>
+    <div class="controls">
+    	<textarea id="ctl_project_description" rows="6" class="input-xlarge"></textarea>
+    </div>
+  </div>
+</form>
+
+<script>
+
+var api = null;
+
+onReadyAPIEvent = function(api_client, session)
+{
+	api = api_client;
+	
+	api.getModel('Project', function(e, model){
+		
+		if (!e)
+			console.log(model);
+		else
+			console.log(e);
+		
+	});
+}
+
+function save()
+{
+	console.log('on save clicked');
+	parent.modalWindowHide();
+}
+
+</script>

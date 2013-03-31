@@ -51,6 +51,8 @@ function login()
 			flash(err, 'error', 5000);
 		else
 		{
+			sessionObj['api_url'] = '<%- api_url  %>';
+			
 			console.log('successful');
 			setSession(sessionObj);
 			

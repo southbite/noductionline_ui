@@ -6,14 +6,18 @@ $(document).ready(function() {
 	{
 		var session = getSession();
 
+		console.log('sess');
+		console.log(session);
+		
 		if (onReadyAPIEvent != null)
 		{
-			var api_client = new noductionline_api_client();
-			api_client.api_url = api_url;
-			api_client.rest_client = new jquery_rest_client();
-			api_client.session_key = getSession().key;
+			console.log('sess');
+			console.log(session);
 			
-			onReadyAPIEvent(api_client);	
+			var api_client = new noductionline_api_client();
+			api_client.initialize(session, new jquery_rest_client());
+			
+			onReadyAPIEvent(api_client, session);	
 		}
 		
 		if (onDocumentReadyEvent != null)

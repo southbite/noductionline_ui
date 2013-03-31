@@ -102,8 +102,9 @@ function openTab(url)
 
 function newProject()
 {
+	var account_id = '<%- account_id  %>';
 	console.log('new project happening');
-	modalWindow('<h3 id="myModalLabel">New project</h3>', '/project/create', 800, 600);
+	modalWindow('<h3 id="myModalLabel">New project</h3>', '/project/create?account_id=' + account_id, 500, 500,'save','Create');
 }
 
 </script>

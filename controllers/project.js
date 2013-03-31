@@ -1,4 +1,5 @@
 exports.create = function(req, res, done){
 	console.log('rendering');
-	this.render(res, 'create', {}, 'layout_modal');
+	var account_id = req.query['account'];
+	this.render(res, 'create', {'account_id':account_id}, 'layout_modal');
 }.bind(this);

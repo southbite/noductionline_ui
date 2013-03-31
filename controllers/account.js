@@ -74,7 +74,7 @@ exports.confirm = function(req, res, done){
 		console.log(sresponse.status);
 		console.log(sresponse.message);
 		
-		if (sresponse.status == "SUCCESSFUL")
+		if (sresponse.status == "OK")
 			this.render(res, 'confirm', sresponse['data']);
 		else
 			this.render(res, 'create', sresponse['data']);
