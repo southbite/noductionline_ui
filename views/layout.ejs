@@ -2,13 +2,19 @@
 <html>
 <head>
 
+<script data-main="../js" src="../js/require.js"></script>
+
+<%- tag('js','base_page') %>
+<%- tag('css','noductionstyle,bootstrap.min') %>
+
 <script>
+//application,bootstrap.min,noductionline_api_client,jquery.cookie,mustache,underscore
+
+initializeRequirements({baseUrl:'../js'});
+
 var IsMessageContainerPage = true;
 var api_url = '<%- api_url  %>';
 </script>
-
-<%- tag('js','jquery-min,api_client_page,jquery.easyui.min,application,bootstrap.min,noductionline_api_client,jquery.cookie,mustache,underscore') %>
-<%- tag('css','noductionstyle,bootstrap.min') %>
 
 <style type="text/css">
 body {

@@ -92,6 +92,25 @@ onReadyAPIEvent = function(api_client)
 	    $('.content-container').height($(window).height() - 130);
 	});
 
+
+	var testProjects = {
+			'Test Project 1':{
+				'Blueprints':[{'Test Blueprint':{}}],
+				'Processors':[{'Test Processor':{}}],
+				'Components':[{'Test Component':{}}],
+				'Schematics':[{'Test Schematic':{}}]
+			},
+			'Test Project 2':{
+				'Blueprints':[{'Test Blueprint':{}}],
+				'Processors':[{'Test Processor':{}}],
+				'Components':[{'Test Component':{}}],
+				'Schematics':[{'Test Schematic':{}}]
+			}
+	}
+	
+	//div_sidemenu_workshop
+	tbtree('#div_sidemenu_workshop').load(testProjects);
+	
 	$(window).trigger('resize');
 }
 

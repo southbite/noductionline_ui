@@ -36,37 +36,36 @@ body {
 
 function login()
 {
-	var api_client = new noductionline_api_client();
-	api_client.api_url = '<%- api_url  %>';
-	api_client.rest_client = new jquery_rest_client();
-	
-	console.log('performing login');
-	
-	api_client.login($('#email').val(),$('#pwd').val(), function(err, sessionObj){
+	require(['jquery','restful_jquery_adapter','restful_api_client','app'], function($, rest, api, app){
 		
-		console.log(err);
-		console.log(sessionObj);
+		api.api_url = '<%- api_url  %>';
+		api.rest_client = rest;
 		
-		if (err)
-			flash(err, 'error', 5000);
-		else
-		{
-			sessionObj['api_url'] = '<%- api_url  %>';
+		console.log('performing login');
+		console.log(api);
+		
+		api.login($('#email').val(),$('#pwd').val(), function(err, sessionObj){
 			
-			console.log('successful');
-			setSession(sessionObj);
+			console.log(err);
+			console.log(sessionObj);
 			
-			
-			console.log(getSession());
+			if (err)
+				app.showMessage(err, 'error', 5000);
+			else
+			{
+				sessionObj['api_url'] = '<%- api_url  %>';
+				
+				console.log('successful');
+				setSession(sessionObj);
 
-			window.location.href = '/account/available';
-		}
+				window.location.href = '/account/available';
+			}
+		});
+		
 	});
 }
 
 </script>
-
-<div class="container">
 
 <div class="form-signin">
   <h2 class="form-signin-heading">Please sign in</h2>
@@ -76,6 +75,4 @@ function login()
     <input type="checkbox" value="remember-me"> Remember me
   </label>
   <button class="btn btn-large btn-primary" type="submit" onclick="login();">Sign in</button>
-</div>
-
 </div>

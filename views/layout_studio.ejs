@@ -2,6 +2,10 @@
 <html>
 <head>
 
+
+<%- tag('js','require,base_page') %>
+<%- tag('css','noductionstyle,bootstrap.min,bootstrap-responsive.min,tbtree') %>
+
 <style>
 
 body,html{
@@ -11,12 +15,15 @@ body,html{
 </style>
 
 <script>
+//tag('js','jquery-min,api_client_page,jquery.easyui.min,application,bootstrap.min,noductionline_api_client,jquery.cookie,mustache,underscore,require,tbtree')
+
 var IsMessageContainerPage = true;
 var api_url = '<%- api_url  %>';
+//,paths:{'jquery':'jquery-min'}
+initializeRequirements();
+
 </script>
 
-<%- tag('js','jquery-min,api_client_page,jquery.easyui.min,application,bootstrap.min,noductionline_api_client,jquery.cookie,mustache,underscore') %>
-<%- tag('css','noductionstyle,bootstrap.min,bootstrap-responsive.min') %>
 
 <script>
 
