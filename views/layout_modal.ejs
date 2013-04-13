@@ -2,20 +2,28 @@
 <html>
 <head>
 
-<script>
-var api_url = '<%- api_url  %>';
-</script>
+	<%- tag('js','require-config,require') %>
+	<%- tag('css','noductionstyle,bootstrap,bootstrap-responsive') %>
+	
+	<script>
 
-<%- tag('js','jquery-min,api_client_page,jquery.easyui.min,application,bootstrap.min,noductionline_api_client,jquery.cookie,mustache,underscore') %>
-<%- tag('css','noductionstyle,bootstrap.min,bootstrap-responsive.min') %>
+		var IsMessageContainerPage = false;
+		var api_url = '<%- api_url  %>';
+		var basePage;
+	
+		require.config(requireConfig());
+	
+		require(['base-page', 'bootstrap'], function(bp){
+			bp.initialize();
+			basePage = bp;
+		});
 
-
+	</script>
 
 </head>
 <body>
 <div class="component_container">
 <%-body%>
-<div id="outer_message_div" class="message_container"><div class="message_container_inner" id="inner_message_div"><table class="message_container_table"><tr><td class="message_container_text">Test Message</td></tr></table>
 </div>
 </body>
 </html>

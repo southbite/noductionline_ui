@@ -85,33 +85,45 @@
 
 onReadyAPIEvent = function(api_client)
 {
-	var session = getSession();
-	var account_id = '<%- account_id  %>';
-	
 	$(window).resize(function() {
 	    $('.content-container').height($(window).height() - 130);
 	});
-
-
-	var testProjects = {
-			'Test Project 1':{
-				'Blueprints':[{'Test Blueprint':{}}],
-				'Processors':[{'Test Processor':{}}],
-				'Components':[{'Test Component':{}}],
-				'Schematics':[{'Test Schematic':{}}]
-			},
-			'Test Project 2':{
-				'Blueprints':[{'Test Blueprint':{}}],
-				'Processors':[{'Test Processor':{}}],
-				'Components':[{'Test Component':{}}],
-				'Schematics':[{'Test Schematic':{}}]
-			}
-	}
 	
-	//div_sidemenu_workshop
-	tbtree('#div_sidemenu_workshop').load(testProjects);
+	basePage.getSession(function(session){
+		
+		var account_id = '<%- account_id  %>';
+		
+		var testProjects = {
+				'Test Project 1':{
+					'Blueprints':{'Test Blueprint':{}},
+					'Processors':{'Test Processor':{}},
+					'Components':{'Test Component':{}},
+					'Schematics':{'Test Schematic':{}}
+				},
+				'Test Project 2':{
+					'Blueprints':{'Test Blueprint':{}},
+					'Processors':{'Test Processor':{}},
+					'Components':{'Test Component':{}},
+					'Schematics':{'Test Schematic':{}}
+				}
+		}
+		
+		loadAccordionMenu('workshop', testProjects, function(){
+			$(window).trigger('resize');
+		});
+		
+	});
 	
-	$(window).trigger('resize');
+}
+
+function loadAccordionMenu(area, menu, done)
+{
+	require(['jquery', 'tbtree'], function ($, tbtree) {
+		    tbtree('#div_sidemenu_' + area).load(menu);
+		    
+		    if (done)
+		    	done();
+	});
 }
 
 function openTab(url)
@@ -121,9 +133,11 @@ function openTab(url)
 
 function newProject()
 {
-	var account_id = '<%- account_id  %>';
-	console.log('new project happening');
-	modalWindow('<h3 id="myModalLabel">New project</h3>', '/project/create?account_id=' + account_id, 500, 500,'save','Create');
+	//require(['app'], function (app) {
+		var account_id = '<%- account_id  %>';
+		console.log('new project happening');
+		basePage.app.modalWindow('<h3 id="myModalLabel">New project</h3>', '/project/create?account_id=' + account_id, 500, 500,'save','Create');
+	//});
 }
 
 </script>

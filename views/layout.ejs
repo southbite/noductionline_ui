@@ -2,18 +2,22 @@
 <html>
 <head>
 
-<script data-main="../js" src="../js/require.js"></script>
-
-<%- tag('js','base_page') %>
-<%- tag('css','noductionstyle,bootstrap.min') %>
+<%- tag('js','require-config,require') %>
+<%- tag('css','noductionstyle,bootstrap,bootstrap-responsive') %>
 
 <script>
-//application,bootstrap.min,noductionline_api_client,jquery.cookie,mustache,underscore
 
-initializeRequirements({baseUrl:'../js'});
+	var IsMessageContainerPage = true;
+	var api_url = '<%- api_url  %>';
+	var basePage;
+	
+	require.config(requireConfig());
+	
+	require(['base-page', 'bootstrap'], function(bp){
+		bp.initialize();
+		basePage = bp;
+	});
 
-var IsMessageContainerPage = true;
-var api_url = '<%- api_url  %>';
 </script>
 
 <style type="text/css">
@@ -93,7 +97,7 @@ body {
 
 <div class="container">
 <div class="masthead">
-<h3 class="muted">Noductionline</h3>
+<h3 class="muted">Prefab</h3>
 <div class="navbar">
   <div class="navbar-inner">
     <div class="container">

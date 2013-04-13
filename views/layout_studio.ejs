@@ -3,8 +3,8 @@
 <head>
 
 
-<%- tag('js','require,base_page') %>
-<%- tag('css','noductionstyle,bootstrap.min,bootstrap-responsive.min,tbtree') %>
+<%- tag('js','require-config,require') %>
+<%- tag('css','noductionstyle,bootstrap,bootstrap-responsive,tbtree') %>
 
 <style>
 
@@ -15,12 +15,20 @@ body,html{
 </style>
 
 <script>
-//tag('js','jquery-min,api_client_page,jquery.easyui.min,application,bootstrap.min,noductionline_api_client,jquery.cookie,mustache,underscore,require,tbtree')
 
 var IsMessageContainerPage = true;
 var api_url = '<%- api_url  %>';
-//,paths:{'jquery':'jquery-min'}
-initializeRequirements();
+var basePage;
+
+require.config(requireConfig());
+
+require(['base-page', 'bootstrap'], function(bp, bootstrap){
+	
+	console.log('bootstrap:');
+	console.log(bootstrap);
+	bp.initialize();
+	basePage = bp;
+});
 
 </script>
 
@@ -33,16 +41,18 @@ onDocumentReadyEvent = function(){
 
 function refreshSessionStatus()
 {
-	var session = getSession();
-	
-	console.log(session);
-	
-	var session_status = "<span>Logged in as " + session.user.emailaddress + ", <a href=\"/auth/logout\">logout</a></span>";
-	
-	if (session['account'] != null)
-		session_status = "<span>Logged in account " + session['account'].name + " as " + session.user.emailaddress + "<br><a href=\"/auth/logout\">logout</a> or <a href=\"/account/available\">switch accounts</a></span>";
-	
-	$('#div_session_status').html(session_status);
+	var session = basePage.getSession(function(session){
+		
+		console.log(session);
+		
+		var session_status = "<span>Logged in as " + session.user.emailaddress + ", <a href=\"/auth/logout\">logout</a></span>";
+		
+		if (session['account'] != null)
+			session_status = "<span>Logged in account " + session['account'].name + " as " + session.user.emailaddress + "<br><a href=\"/auth/logout\">logout</a> or <a href=\"/account/available\">switch accounts</a></span>";
+		
+		$('#div_session_status').html(session_status);
+		
+	});
 }
 
 
@@ -54,7 +64,7 @@ function refreshSessionStatus()
 <div class="container-fluid">
 	<div class="row-fluid">
 		<div class="span8">
-		<h3 class="muted">Noductionline Studio</h3>
+		<h3 class="muted">Prefab Studio</h3>
 		</div>
 		<div class="span4">
 			<div id="div_session_status" name="div_session_status">

@@ -85,7 +85,7 @@ define(['jquery', 'underscore'], function ($, _) {
       var $li = $('<li></li>')
         .append('<i></i>')
         .append('<a></a>')
-        .append('<i class="icon-lock"></i>')
+        //.append('<i class="icon-lock"></i>')
         .attr('data-path', p)
         .attr('data-state', 'collapsed')
         .appendTo($ul);

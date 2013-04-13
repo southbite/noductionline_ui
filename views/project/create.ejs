@@ -16,17 +16,21 @@
 <script>
 
 var api = null;
-
-onReadyAPIEvent = function(api_client, session)
+var appl = null;
+onReadyAPIEvent = function(api_client, session, app)
 {
-	api = api_client;
-	
-	api.getModel('Project', function(e, model){
+	require(['jquery'], function($){
 		
-		if (!e)
-			console.log(model);
-		else
-			console.log(e);
+		api = api_client;
+		appl = app;
+		api.getModel('Project', function(e, model){
+			
+			if (!e)
+				console.log(model);
+			else
+				console.log(e);
+			
+		});
 		
 	});
 }
@@ -34,7 +38,7 @@ onReadyAPIEvent = function(api_client, session)
 function save()
 {
 	console.log('on save clicked');
-	parent.modalWindowHide();
+	parent.basePage.app.modalWindowHide();
 }
 
 </script>

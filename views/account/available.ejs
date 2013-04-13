@@ -24,17 +24,23 @@ function availableClicked(accountId)
 {
 	console.log('available clicked ' + accountId);
 	
-	var session = getSession();
-	var account = _.findWhere(availableAccounts, {_id:accountId});
-	
-	console.log('found acc');
-	console.log(account);
-	
-	session['account'] = account;
-	
-	setSession(session);
-	
-	window.location.href = "/account/studio?account=" + accountId;
+	require(['jquery','underscore'], function($, _){
+		var session = basePage.getSession(function(session){
+			
+			var account = _.findWhere(availableAccounts, {_id:accountId});
+			
+			console.log('found acc');
+			console.log(account);
+			
+			session['account'] = account;
+			
+			basePage.setSession(session);
+			
+			window.location.href = "/account/studio?account=" + accountId;
+			
+		});
+	});
+
 }
 
 </script>

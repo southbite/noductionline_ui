@@ -56,7 +56,7 @@ function login()
 				sessionObj['api_url'] = '<%- api_url  %>';
 				
 				console.log('successful');
-				setSession(sessionObj);
+				basePage.setSession(sessionObj);
 
 				window.location.href = '/account/available';
 			}
