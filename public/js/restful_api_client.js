@@ -30,6 +30,9 @@ define(function () {
     			this.rest_client = client;
     			this.session = sess;
     			
+    			console.log('session for api_client');
+    			console.log(sess);
+    			
     			if (sess['account'] != null)
     				this.account_id = sess.account.id;
     		},
@@ -104,7 +107,7 @@ define(function () {
     		{
     			this.validate(true,true);
     			
-    			this.rest_client.get(this.api_url + '/' + this.account_id + '/' + type + '/model?SESSIONTOKEN=' + this.session_key, function(err, response){
+    			this.rest_client.get(this.api_url + '/' + this.session.account._id + '/' + type + '/model?SESSIONTOKEN=' + this.session_key, function(err, response){
     						
     						if (!err)
     						{
@@ -129,10 +132,49 @@ define(function () {
     		{
     			this.validate(true,true);
     			
+    			this.rest_client.post(this.api_url + '/' + this.session.account._id + '/' + type + '?SESSIONTOKEN=' + this.session_key, criteria, function(err, response){
+					
+					if (!err)
+					{
+						console.log(response);
+						
+						if (response.status == 'OK')
+						{
+							done(null, response.data);
+						}
+						else
+						{
+							done(response);
+						}
+					}
+					else
+						done(err);
+					
+				});
     		},
     		getAll:function(type, done)
     		{
     			this.validate(true,true);
+    			
+    			this.rest_client.get(this.api_url + '/' + this.session.account._id + '/' + type + '?SESSIONTOKEN=' + this.session_key, function(err, response){
+					
+					if (!err)
+					{
+						console.log(response);
+						
+						if (response.status == 'OK')
+						{
+							done(null, response.data);
+						}
+						else
+						{
+							done(response);
+						}
+					}
+					else
+						done(err);
+					
+				});
     			
     		},
     		getById:function(type, id, done)
@@ -144,7 +186,7 @@ define(function () {
     		{
     			this.validate(true,true);
     			
-    			this.rest_client.post(this.api_url + '/' + this.account_id + '/' + type + '/create?SESSIONTOKEN=' + this.session_key, obj, function(err, response){
+    			this.rest_client.post(this.api_url + '/' + this.session.account._id + '/' + type + '?SESSIONTOKEN=' + this.session_key, obj, function(err, response){
 					
 					if (!err)
 					{

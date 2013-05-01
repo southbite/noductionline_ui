@@ -93,6 +93,13 @@ onReadyAPIEvent = function(api_client)
 		
 		var account_id = '<%- account_id  %>';
 		
+		api_client.getAll('Project', function(err, projects){
+			loadAccordionMenu('workshop', projects, null, 'Name', function(){
+				$(window).trigger('resize');
+			});
+		});
+		
+		/*
 		var testProjects = {
 				'Test Project 1':{
 					'Blueprints':{'Test Blueprint':{}},
@@ -107,16 +114,14 @@ onReadyAPIEvent = function(api_client)
 					'Schematics':{'Test Schematic':{}}
 				}
 		}
+		*/
 		
-		loadAccordionMenu('workshop', testProjects, function(){
-			$(window).trigger('resize');
-		});
 		
 	});
 	
 }
 
-function loadAccordionMenu(area, menu, done)
+function loadAccordionMenu(area, objects, parentNodeID, nameProperty, idProperty, done)
 {
 	require(['jquery', 'tbtree'], function ($, tbtree) {
 		    tbtree('#div_sidemenu_' + area).load(menu);
