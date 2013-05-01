@@ -144,6 +144,26 @@ define(function () {
     		{
     			this.validate(true,true);
     			
+    			this.rest_client.post(this.api_url + '/' + this.account_id + '/' + type + '/create?SESSIONTOKEN=' + this.session_key, obj, function(err, response){
+					
+					if (!err)
+					{
+						console.log(response);
+						
+						if (response.status == 'OK')
+						{
+							done(null, response.data);
+						}
+						else
+						{
+							done(response);
+						}
+					}
+					else
+						done(err);
+					
+				});
+    			
     		},
     		update:function(type, obj, id, done)
     		{

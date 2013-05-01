@@ -35,10 +35,39 @@ onReadyAPIEvent = function(api_client, session, app)
 	});
 }
 
+function getObject(control_ids, property_names)
+{
+	var returnObject = {};
+	
+	for (var i = 0; i < control_ids.length;i++)
+	{
+		returnObject[property_names[i]] = $('#' + control_ids[i]).val();
+	}
+
+	return returnObject;
+}
+
 function save()
 {
 	console.log('on save clicked');
-	parent.basePage.app.modalWindowHide();
+	
+	var newProject = getObject(['ctl_project_name','ctl_project_description'],['Name','Description']);
+	console.log(newProject);
+
+	api.create('Project', newProject, function(err, response){
+		
+		if (!err)
+		{
+			appl.showMessage('Project created successfully', 'info', 2000);
+			parent.basePage.app.modalWindowHide();
+		}
+		else
+		{
+			appl.showMessage('Project creation failed: ' + err, 'error', 2000);
+		}
+	})
+
+	
 }
 
 </script>
