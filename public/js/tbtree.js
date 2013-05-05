@@ -74,36 +74,78 @@ define(['jquery', 'underscore'], function ($, _) {
     }
   };
 
-  var buildTree = function (obj, $parent) {
-    var $ul = $('<ul></ul>')
-      .appendTo($parent);
-    for (var p in obj) {
-      if (!obj.hasOwnProperty(p)) {
-        continue;
-      }
-      var value = obj[p];
-      var $li = $('<li></li>')
-        .append('<i></i>')
-        .append('<a></a>')
-        //.append('<i class="icon-lock"></i>')
-        .attr('data-path', p)
-        .attr('data-state', 'collapsed')
-        .appendTo($ul);
-      if (_.isObject(value)) {
-        $li.addClass('branch');
-        $li.find('a').text(p);
-        $li.find('i').first().addClass(config.icons.collapsed);
-        buildTree(value, $li);
-      } else {
-        $li.addClass('leaf');
-        $li.find('a')
-          .append('<span class="label label-inverse">' + p + '</span>')
-          .find('span')
-          .after(obj[p]);
-        $li.find('i').first().addClass(config.icons.leaf);
-      }
-      $li.find('> ul').hide();
-    }
+  var updateTree = function (items, $parent, parentItemID, nameProperty, idProperty, modelType, done) {
+	try
+	{
+		var $ul = null;
+		var parentItem = null;
+		
+		if (parentItemID == null) // means this is a base collection
+		{
+			$parent.html('');
+			$ul = $('<ul></ul>').appendTo($parent);
+			console.log('parent is null');
+		}
+		else
+		{
+			$ul = $parent('ul');
+			parentItem = $('#' + modelType + '_' + parentItemID);
+			console.log('parent is not null');
+		}
+			
+		
+	    for (var itemIndex in items) {
+	    
+	      var itemInstance = items[itemIndex];
+	      var itemName = itemInstance[nameProperty];
+	      
+	      if (itemName == null)
+	    	  itemName = "Undefined";
+	      
+	      var itemId = itemInstance[idProperty];
+	      
+	      /*
+	      if (!obj.hasOwnProperty(p)) {
+	        continue;
+	      }//huh?
+	      */
+	      
+	      console.log(itemId);
+	      
+	      var $li = $('<li id=\'' + modelType + '_' + itemId + '\'></li>')
+	        .append('<i></i>')
+	        .append('<a></a>')
+	        //.append('<i class="icon-lock"></i>')
+	        .attr('data-path', modelType + '_' + itemId)
+	        .attr('data-state', 'collapsed')
+	        .appendTo($ul);
+	      
+	      /*
+	      if (_.isObject(value)) {
+	        $li.addClass('branch');
+	        $li.find('a').text(p);
+	        $li.find('i').first().addClass(config.icons.collapsed);
+	        updateTree(value, $li);
+	      } else {
+	      */
+	        $li.addClass('branch');
+	        $li.find('a')
+	          .append('<span class="label label-inverse">' + nameProperty + '</span>')
+	          .find('span')
+	          .after(itemName);
+	        $li.find('i').first().addClass(config.icons.collapsed);
+	      /*}*/
+	      $li.find('> ul').hide();
+	    }
+	}
+	catch(e)
+	{
+		console.log(e);
+		 done(e);
+	}
+    
+   done(null); 
+   
   };
 
   var triggerPathEvent = function ($li, evt) {
@@ -134,42 +176,47 @@ define(['jquery', 'underscore'], function ($, _) {
   };
 
   var api = {
-    load: function (data) {
+    update: function (data, parentItemID, nameProperty, idProperty, modelType, done) {
       var $E = $(config.selector).addClass('tbtree');
 
-      buildTree(data, $E);
+      console.log('updating tree');
+      
+      updateTree(data, $E, parentItemID, nameProperty, idProperty, modelType, function(e){
+    	  
+    	  console.log('updating tree done');
+    	  
+    	  $E.on('click', 'li', function (e) {
+    	        var $li = $(this);
+    	        setTimeout(function () {
+    	          var dblclick = parseInt($li.data('double'), 10);
+    	          if (dblclick > 0) {
+    	            $li.data('double', dblclick - 1);
+    	            return;
+    	          }
+    	          $E.find('li').removeClass('highlighted');
+    	          $li.addClass('highlighted');
+    	          triggerPathEvent($li, 'highlighted');
+    	          toggleExpandState($li);
+    	        }, 200);
+    	        return false;
+    	      });
 
-      $E.on('click', 'li', function (e) {
-        var $li = $(this);
-        setTimeout(function () {
-          var dblclick = parseInt($li.data('double'), 10);
-          if (dblclick > 0) {
-            $li.data('double', dblclick - 1);
-            return;
-          }
-          $E.find('li').removeClass('highlighted');
-          $li.addClass('highlighted');
-          triggerPathEvent($li, 'highlighted');
-          toggleExpandState($li);
-        }, 200);
-        return false;
+    	      $E.on('dblclick', 'li', function (e) {
+    	        var $li = $(this);
+    	        $li.data('double', 2);
+    	        triggerPathEvent($li, 'selected');
+    	        return false;
+    	      });
+
+    	      $E.on('click', 'i.icon-lock, i.icon-unlock', function (e) {
+    	        $(this).toggleClass('icon-lock', 'icon-unlock');
+    	        e.stopPropagation();
+    	        e.preventDefault();
+    	        return false;
+    	      });
+    	      
+    	      done(e);
       });
-
-      $E.on('dblclick', 'li', function (e) {
-        var $li = $(this);
-        $li.data('double', 2);
-        triggerPathEvent($li, 'selected');
-        return false;
-      });
-
-      $E.on('click', 'i.icon-lock, i.icon-unlock', function (e) {
-        $(this).toggleClass('icon-lock', 'icon-unlock');
-        e.stopPropagation();
-        e.preventDefault();
-        return false;
-      });
-
-      return this;
     },
 
     filter: function (query) {

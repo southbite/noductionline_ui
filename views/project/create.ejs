@@ -51,7 +51,7 @@ function save()
 {
 	console.log('on save clicked');
 	
-	var newProject = getObject(['ctl_project_name','ctl_project_description'],['Name','Description']);
+	var newProject = getObject(['ctl_project_name','ctl_project_description'],['name','description']);
 	console.log(newProject);
 
 	api.create('Project', newProject, function(err, response){

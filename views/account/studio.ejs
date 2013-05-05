@@ -94,7 +94,7 @@ onReadyAPIEvent = function(api_client)
 		var account_id = '<%- account_id  %>';
 		
 		api_client.getAll('Project', function(err, projects){
-			loadAccordionMenu('workshop', projects, null, 'Name', function(){
+			loadAccordionMenu('workshop', projects, null, 'name', '_id', 'Project', function(e){
 				$(window).trigger('resize');
 			});
 		});
@@ -121,13 +121,10 @@ onReadyAPIEvent = function(api_client)
 	
 }
 
-function loadAccordionMenu(area, objects, parentNodeID, nameProperty, idProperty, done)
+function loadAccordionMenu(area, objects, parentItemID, nameProperty, idProperty, modelType, done)
 {
 	require(['jquery', 'tbtree'], function ($, tbtree) {
-		    tbtree('#div_sidemenu_' + area).load(menu);
-		    
-		    if (done)
-		    	done();
+		    tbtree('#div_sidemenu_' + area).update(objects, parentItemID, nameProperty, idProperty, modelType, done);
 	});
 }
 
