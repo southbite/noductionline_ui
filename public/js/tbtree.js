@@ -74,33 +74,89 @@ define(['jquery', 'underscore'], function ($, _) {
     }
   };
 
-  var updateTree = function (items, $parent, parentItemID, nameProperty, idProperty, modelType, done) {
+  /*
+  
+  
+  
+  $("#insert").on('click', function() {
+    var newLi = $("<li><a href='#'>"+$("#fruit").val()+"</a></li>").hide();
+    $('li', 'ul').add(newLi.fadeIn(800)).sort(sortAlpha).appendTo('ul');
+  });
+  
+ 
+  
+  */
+  
+  
+  
+  var updateTree = function (items, $container, parentItemID, nameProperty, idProperty, modelType, beforeItemAddEvent, itemAddedEvent, done) {
 	try
 	{
-		var $ul = null;
+		var sortAlpha = function(a,b){  
+			
+			//console.log('sorting');
+			//console.log(a.innerText);
+			//console.log(b.innerText);
+			
+			if (a.innerText.toLowerCase() == b.innerText.toLowerCase())
+				return 0;
+			
+		    return a.innerText.toLowerCase() > b.innerText.toLowerCase() ? 1 : -1;  
+		};
+		
 		var parentItem = null;
 		
 		if (parentItemID == null) // means this is a base collection
 		{
-			$parent.html('');
-			$ul = $('<ul></ul>').appendTo($parent);
-			console.log('parent is null');
+			//$container.html(''); umm, no cannot do this - as this is an update
+			
+			var containerUL = $container.find('ul:first-child');
+			
+			//console.log('containerUL');
+			//console.log(containerUL);
+			
+			if (containerUL.length == 0)
+				parentItem = $('<ul></ul>').appendTo($container);
+			else
+				parentItem = containerUL;
+			
+			console.log('parentItem');
+			console.log(parentItem);
+			
+			//console.log('parent is null');
 		}
 		else
 		{
-			$ul = $parent('ul');
 			parentItem = $('#' + modelType + '_' + parentItemID);
-			console.log('parent is not null');
+			
+			if (parentItem.length == 0)
+				throw "The parent item with id: " + modelType + '_' + parentItemID + ", does not exist.";
+			
+			var parentItemUL = parentItem.find(':first-child');
+			
+			if (parentItemUL.length == 0)
+				parentItem.append('<ul id=\'ul' + modelType + '_' + parentItemID + '\'></ul>');
+			
+			parentItem = parentItem.find('#ul' + modelType + '_' + parentItemID);
+			
+			//console.log('parent is not null');
+			//console.log(parentItem);
 		}
 			
-		
 	    for (var itemIndex in items) {
 	    
 	      var itemInstance = items[itemIndex];
+	      
+	      //console.log('itemInstance');
+	      //console.log(itemInstance);
+	      
+	      //console.log('nameProperty');
+	      //console.log(nameProperty);
+	      
 	      var itemName = itemInstance[nameProperty];
 	      
 	      if (itemName == null)
-	    	  itemName = "Undefined";
+	    	  itemName = "No name";
 	      
 	      var itemId = itemInstance[idProperty];
 	      
@@ -110,15 +166,36 @@ define(['jquery', 'underscore'], function ($, _) {
 	      }//huh?
 	      */
 	      
-	      console.log(itemId);
+	      //console.log(itemId);
 	      
 	      var $li = $('<li id=\'' + modelType + '_' + itemId + '\'></li>')
 	        .append('<i></i>')
 	        .append('<a></a>')
-	        //.append('<i class="icon-lock"></i>')
 	        .attr('data-path', modelType + '_' + itemId)
 	        .attr('data-state', 'collapsed')
-	        .appendTo($ul);
+	        .addClass('branch')
+	        .data('item-data', itemInstance)
+	        .hide();
+	        
+	      $li.find('a').append(itemName);
+	      $li.find('i').first().addClass(config.icons.collapsed);
+	      
+	      beforeItemAddEvent(function(addItem){
+	    	  
+	    	  if (addItem)
+	    	  {
+	    		  console.log('beforeItemAddEvent true');
+	    		  $(parentItem.find('li'), parentItem).add($li.fadeIn(800)).sort(sortAlpha).appendTo(parentItem);
+	    	      itemAddedEvent($li);
+	    	  }
+	    	  
+	      });
+	      
+	     
+	      
+	     // $(parentItem).add($li.fadeIn(800)).sort(sortAlpha);
+	        
+	      //.appendTo(parentItem);
 	      
 	      /*
 	      if (_.isObject(value)) {
@@ -128,19 +205,18 @@ define(['jquery', 'underscore'], function ($, _) {
 	        updateTree(value, $li);
 	      } else {
 	      */
-	        $li.addClass('branch');
-	        $li.find('a')
-	          .append('<span class="label label-inverse">' + nameProperty + '</span>')
-	          .find('span')
-	          .after(itemName);
-	        $li.find('i').first().addClass(config.icons.collapsed);
+	        
 	      /*}*/
-	      $li.find('> ul').hide();
+	        
+	      
 	    }
+	    
+	    //parentItem.find('li').sort(sortAlpha);
+	    //parentItem.find('li').fadeIn(800);
 	}
 	catch(e)
 	{
-		console.log(e);
+		//console.log(e);
 		 done(e);
 	}
     
@@ -148,6 +224,7 @@ define(['jquery', 'underscore'], function ($, _) {
    
   };
 
+  /*
   var triggerPathEvent = function ($li, evt) {
     var segments = [];
     segments.push($li.attr('data-path'));
@@ -157,7 +234,7 @@ define(['jquery', 'underscore'], function ($, _) {
     var fullPath = segments.reverse().join('/');
     bus.publish(evt, {path: fullPath});
   };
-
+   */
   var toggleExpandState = function ($li) {
     var state = $li.attr('data-state');
     if (state === 'expanded') {
@@ -176,51 +253,52 @@ define(['jquery', 'underscore'], function ($, _) {
   };
 
   var api = {
+	beforeItemAdd:function(done){
+		done(true);
+	},
+	itemAdded:function(item){
+		
+	},
+	itemClicked:function(item){
+		
+	},
     update: function (data, parentItemID, nameProperty, idProperty, modelType, done) {
       var $E = $(config.selector).addClass('tbtree');
-
-      console.log('updating tree');
+      var itemClickedEvent = this.itemClicked;
+      //console.log('updating tree');
       
-      updateTree(data, $E, parentItemID, nameProperty, idProperty, modelType, function(e){
+      updateTree(data, $E, parentItemID, nameProperty, idProperty, modelType, this.beforeItemAdd, this.itemAdded, function(e){
     	  
-    	  console.log('updating tree done');
+    	  //console.log('updating tree done');
     	  
     	  $E.on('click', 'li', function (e) {
     	        var $li = $(this);
-    	        setTimeout(function () {
-    	          var dblclick = parseInt($li.data('double'), 10);
-    	          if (dblclick > 0) {
-    	            $li.data('double', dblclick - 1);
-    	            return;
-    	          }
-    	          $E.find('li').removeClass('highlighted');
-    	          $li.addClass('highlighted');
-    	          triggerPathEvent($li, 'highlighted');
-    	          toggleExpandState($li);
-    	        }, 200);
+    	        
+    	        $E.find('li').removeClass('highlighted');
+  	          	$li.addClass('highlighted');
+  	          	// triggerPathEvent($li, 'highlighted');
+  	          	toggleExpandState($li);
+    	        
+  	          itemClickedEvent($li);
+  	          	
     	        return false;
     	      });
 
+    	  	  /*
     	      $E.on('dblclick', 'li', function (e) {
     	        var $li = $(this);
     	        $li.data('double', 2);
     	        triggerPathEvent($li, 'selected');
     	        return false;
     	      });
-
-    	      $E.on('click', 'i.icon-lock, i.icon-unlock', function (e) {
-    	        $(this).toggleClass('icon-lock', 'icon-unlock');
-    	        e.stopPropagation();
-    	        e.preventDefault();
-    	        return false;
-    	      });
-    	      
+    	      */
+    	  
     	      done(e);
-      });
+      }.bind(this));
     },
 
     filter: function (query) {
-      console.log(query);
+      //console.log(query);
       return this;
     },
 

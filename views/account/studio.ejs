@@ -93,8 +93,15 @@ onReadyAPIEvent = function(api_client)
 		
 		var account_id = '<%- account_id  %>';
 		
+		var projectItemClicked = function(item)
+		{
+			console.log('project item was clicked');
+			console.log(item);
+			
+		}.bind(this);
+		
 		api_client.getAll('Project', function(err, projects){
-			loadAccordionMenu('workshop', projects, null, 'name', '_id', 'Project', function(e){
+			loadAccordionMenu('workshop', projects, null, 'name', '_id', 'Project', null, null, projectItemClicked, function(e){
 				$(window).trigger('resize');
 			});
 		});
@@ -121,10 +128,21 @@ onReadyAPIEvent = function(api_client)
 	
 }
 
-function loadAccordionMenu(area, objects, parentItemID, nameProperty, idProperty, modelType, done)
+function loadAccordionMenu(area, objects, parentItemID, nameProperty, idProperty, modelType, onBeforeItemAdded, onItemAdded, onItemClicked, done)
 {
 	require(['jquery', 'tbtree'], function ($, tbtree) {
-		    tbtree('#div_sidemenu_' + area).update(objects, parentItemID, nameProperty, idProperty, modelType, done);
+			var menuTree = tbtree('#div_sidemenu_' + area);
+		
+			if (onBeforeItemAdded != null)
+				menuTree.beforeItemAdd = onBeforeItemAdded;
+			
+			if (onItemAdded != null)
+				menuTree.itemAdded = onItemAdded;
+			
+			if (onItemClicked != null)
+				menuTree.itemClicked = onItemClicked;
+			
+			menuTree.update(objects, parentItemID, nameProperty, idProperty, modelType, done);
 	});
 }
 
@@ -140,6 +158,24 @@ function newProject()
 		console.log('new project happening');
 		basePage.app.modalWindow('<h3 id="myModalLabel">New project</h3>', '/project/create?account_id=' + account_id, 500, 500,'save','Create');
 	//});
+}
+
+function newObjectAdded(area, type, object, done)
+{
+	if (type == 'Project')
+	{
+		require(['jquery', 'tbtree'], function ($, tbtree) {
+		    tbtree('#div_sidemenu_' + area).update([object], null, 'name', '_id', type, function(){
+		    	
+		    	console.log('new project added ');
+		    	console.log(object);
+		    	
+		    	if (done != null)
+		    		done();
+		    	
+		    });
+		});
+	}
 }
 
 </script>

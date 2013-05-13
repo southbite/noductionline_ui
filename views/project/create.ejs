@@ -59,7 +59,15 @@ function save()
 		if (!err)
 		{
 			appl.showMessage('Project created successfully', 'info', 2000);
-			parent.basePage.app.modalWindowHide();
+			
+
+			console.log('newProject');
+			console.log(response);
+			
+			//(area, type, object, done)
+			parent.newObjectAdded('workshop', 'Project', response, function(){
+				parent.basePage.app.modalWindowHide();
+			});
 		}
 		else
 		{
