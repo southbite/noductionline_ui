@@ -70,7 +70,8 @@ define(['jquery', 'underscore'], function ($, _) {
     icons: {
       expanded: 'icon-chevron-down',
       collapsed: 'icon-chevron-right',
-      leaf: 'icon-file'
+      leaf: 'icon-file',
+      loading: 'ico-loading'
     }
   };
 
@@ -235,6 +236,49 @@ define(['jquery', 'underscore'], function ($, _) {
     bus.publish(evt, {path: fullPath});
   };
    */
+  
+  var setLeafState = function ($li, state) {
+	  
+	  //[myc="blue"],[myid="1"],[myid="3"]
+	  
+	  if (state == 'expand')
+	  {
+		  $li.find('> ul').show();
+		  
+	      $li.find('.' + config.icons.collapsed + ',' + '.' + config.icons.loading)
+	        .removeClass(config.icons.collapsed)
+	        .removeClass(config.icons.loading)
+	        .addClass(config.icons.expanded);
+	      $li.attr('data-state', 'expanded');
+	  }
+	  
+	  if (state == 'collapse')
+	  {
+		  $li.find('> ul').hide();
+		  
+		  $li.find('.' + config.icons.expanded + ',' + '.' + config.icons.loading)
+	        .removeClass(config.icons.expanded)
+	        .removeClass(config.icons.loading)
+	        .addClass(config.icons.collapsed);
+	      $li.attr('data-state', 'collapsed');
+	  }
+	  
+	  if (state == 'busy')
+	  {
+
+		  $li.find('.' + config.icons.collapsed + ',' + '.' + config.icons.expanded)
+	        .removeClass(config.icons.collapsed)
+	        .removeClass(config.icons.expanded)
+	        .addClass(config.icons.loading);
+		  
+	      console.log('prev data state ' + $li.attr('prev-data-state'));
+		  
+		  $li.attr('prev-data-state',  $li.attr('data-state'));
+	      $li.attr('data-state', 'expanded');
+	  }
+	  
+  }
+  
   var toggleExpandState = function ($li) {
     var state = $li.attr('data-state');
     if (state === 'expanded') {
@@ -248,6 +292,11 @@ define(['jquery', 'underscore'], function ($, _) {
       $li.find('> .' + config.icons.collapsed)
         .removeClass(config.icons.collapsed)
         .addClass(config.icons.expanded);
+      
+      $li.attr('prev-data-state',  $li.attr('data-state'));
+      
+      console.log('prev data state ' + $li.attr('prev-data-state'));
+      
       $li.attr('data-state', 'expanded');
     }
   };
@@ -259,7 +308,7 @@ define(['jquery', 'underscore'], function ($, _) {
 	itemAdded:function(item){
 		
 	},
-	itemClicked:function(item){
+	itemClicked:function(item, clickDone){
 		
 	},
     update: function (data, parentItemID, nameProperty, idProperty, modelType, done) {
@@ -274,12 +323,26 @@ define(['jquery', 'underscore'], function ($, _) {
     	  $E.on('click', 'li', function (e) {
     	        var $li = $(this);
     	        
-    	        $E.find('li').removeClass('highlighted');
-  	          	$li.addClass('highlighted');
-  	          	// triggerPathEvent($li, 'highlighted');
-  	          	toggleExpandState($li);
+    	        setLeafState($li, 'busy');
     	        
-  	          itemClickedEvent($li);
+    	        $E.find('li').removeClass('highlighted');
+  	          	
+  	          	// triggerPathEvent($li, 'highlighted');
+  	          	//toggleExpandState($li);
+    	        
+	  	        itemClickedEvent($li, function(){
+	  	        	console.log('item clicked done');
+	  	        	$li.removeClass('ico-loading');
+	  	        	$li.addClass('highlighted');
+	  	        	
+	  	        	console.log('prev data state ' + $li.attr('prev-data-state'));
+	  	        	
+	  	        	if ($li.attr('prev-data-state') == 'expanded')
+	  	        		setLeafState($li, 'collapse');
+	  	        	
+	  	        	if ($li.attr('prev-data-state') == 'collapsed')
+	  	        		setLeafState($li, 'expand');
+	  	        });
   	          	
     	        return false;
     	      });

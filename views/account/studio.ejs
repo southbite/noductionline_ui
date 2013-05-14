@@ -93,10 +93,23 @@ onReadyAPIEvent = function(api_client)
 		
 		var account_id = '<%- account_id  %>';
 		
-		var projectItemClicked = function(item)
+		var projectItemClicked = function(item, clickDone)
 		{
 			console.log('project item was clicked');
 			console.log(item);
+			
+			var clickedProject = item.data('item-data');
+			
+			api_client.find('Robot', {'projectId':clickedProject._id, type: 'processor'}, function(err, robots){
+				
+				console.log('clickedProject');
+				console.log(clickedProject);
+				console.log(err);
+				
+				setTimeout(clickDone, 3000);
+				
+			});
+
 			
 		}.bind(this);
 		

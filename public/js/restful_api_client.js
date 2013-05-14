@@ -132,7 +132,7 @@ define(function () {
     		{
     			this.validate(true,true);
     			
-    			this.rest_client.post(this.api_url + '/' + this.session.account._id + '/' + type + '?SESSIONTOKEN=' + this.session_key, criteria, function(err, response){
+    			this.rest_client.post(this.api_url + '/' + this.session.account._id + '/' + type + '/find?SESSIONTOKEN=' + this.session_key, criteria, function(err, response){
 					
 					if (!err)
 					{
