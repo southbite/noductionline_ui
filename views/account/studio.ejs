@@ -83,80 +83,105 @@
 
 <script>
 
+var api;
+var sess;
+
 onReadyAPIEvent = function(api_client)
 {
 	$(window).resize(function() {
 	    $('.content-container').height($(window).height() - 130);
 	});
 	
-	basePage.getSession(function(session){
+	api = api_client;
+	initializeWorkshop();
 		
-		var account_id = '<%- account_id  %>';
+	
+}
+
+function initializeWorkshop()
+{
+	var projectItemClicked = function(item, menuTree, clickDone)
+	{
 		
-		var projectItemClicked = function(item, clickDone)
+		console.log('project item was clicked');
+		console.log(item);
+		
+		var clickedProject = item.data('item-data');
+		
+		if (item.attr('model-type') == 'Project')
 		{
-			console.log('project item was clicked');
-			console.log(item);
-			
-			var clickedProject = item.data('item-data');
-			
-			api_client.find('Robot', {'projectId':clickedProject._id, type: 'processor'}, function(err, robots){
+			// var updateTree = function ($container, tree, items, parentItemID, nameProperty, idProperty, modelType, done) {
+			console.log('updating tree, clicked on project');
+			console.log(item.attr('id'));
+			menuTree.update([{name:'Robots', _id:item.attr('object-id')}], item.attr('id'), 'name', '_id', 'Project:Robots', function(e){
 				
-				console.log('clickedProject');
-				console.log(clickedProject);
-				console.log(err);
-				
-				setTimeout(clickDone, 3000);
+				api.find('Robot', {'projectId':clickedProject._id, type: 'processor'}, function(err, robots){
+					
+					console.log('clickedProject');
+					console.log(clickedProject);
+					console.log(err);
+					
+					setTimeout(clickDone, 3000);
+					
+				});
 				
 			});
-
-			
-		}.bind(this);
+		}
 		
-		api_client.getAll('Project', function(err, projects){
-			loadAccordionMenu('workshop', projects, null, 'name', '_id', 'Project', null, null, projectItemClicked, function(e){
+		
+		
+	}.bind(this);
+	
+	initializeAccordionMenu('workshop', null, null, projectItemClicked, function(menuTree){
+		
+		api.getAll('Project', function(err, projects){
+			menuTree.update(projects, null, 'name', '_id', 'Project', function(e){
 				$(window).trigger('resize');
 			});
 		});
+
+	});
+}
+
+function initializeAccordionMenu(area, onBeforeItemAdded, onItemAdded, onItemClicked, done)
+{
+	getMenuTree(area, function(menuTree){
 		
-		/*
-		var testProjects = {
-				'Test Project 1':{
-					'Blueprints':{'Test Blueprint':{}},
-					'Processors':{'Test Processor':{}},
-					'Components':{'Test Component':{}},
-					'Schematics':{'Test Schematic':{}}
-				},
-				'Test Project 2':{
-					'Blueprints':{'Test Blueprint':{}},
-					'Processors':{'Test Processor':{}},
-					'Components':{'Test Component':{}},
-					'Schematics':{'Test Schematic':{}}
-				}
-		}
-		*/
+		if (onBeforeItemAdded != null)
+			menuTree.beforeItemAdd = onBeforeItemAdded;
 		
+		if (onItemAdded != null)
+			menuTree.itemAdded = onItemAdded;
 		
+		if (onItemClicked != null)
+			menuTree.itemClicked = onItemClicked;
+		
+		done(menuTree);
 	});
 	
 }
 
-function loadAccordionMenu(area, objects, parentItemID, nameProperty, idProperty, modelType, onBeforeItemAdded, onItemAdded, onItemClicked, done)
+function getMenuTree(area, done)
 {
 	require(['jquery', 'tbtree'], function ($, tbtree) {
-			var menuTree = tbtree('#div_sidemenu_' + area);
+		var menuTree = tbtree('#div_sidemenu_' + area);
+		done(menuTree);
 		
-			if (onBeforeItemAdded != null)
-				menuTree.beforeItemAdd = onBeforeItemAdded;
-			
-			if (onItemAdded != null)
-				menuTree.itemAdded = onItemAdded;
-			
-			if (onItemClicked != null)
-				menuTree.itemClicked = onItemClicked;
-			
-			menuTree.update(objects, parentItemID, nameProperty, idProperty, modelType, done);
 	});
+}
+
+function loadAccordionMenu(menuTree, objects, parentItemID, nameProperty, idProperty, modelType, done)
+{
+	if (onBeforeItemAdded != null)
+		menuTree.beforeItemAdd = onBeforeItemAdded;
+	
+	if (onItemAdded != null)
+		menuTree.itemAdded = onItemAdded;
+	
+	if (onItemClicked != null)
+		menuTree.itemClicked = onItemClicked;
+	
+	menuTree.update(objects, parentItemID, nameProperty, idProperty, modelType, done);
 }
 
 function openTab(url)
