@@ -85,6 +85,7 @@
 
 var api;
 var sess;
+var workshopMenu;
 
 onReadyAPIEvent = function(api_client)
 {
@@ -103,33 +104,50 @@ function initializeWorkshop()
 	var projectItemClicked = function(item, menuTree, clickDone)
 	{
 		
-		console.log('project item was clicked');
-		console.log(item);
+		//console.log('project item was clicked');
+		//console.log(item);
 		
 		var clickedProject = item.data('item-data');
 		
 		if (item.attr('model-type') == 'Project')
 		{
 			// var updateTree = function ($container, tree, items, parentItemID, nameProperty, idProperty, modelType, done) {
-			console.log('updating tree, clicked on project');
-			console.log(item.attr('id'));
-			menuTree.update([{name:'Robots', _id:item.attr('object-id')}], item.attr('id'), 'name', '_id', 'Project:Robots', function(e){
+			//console.log('updating tree, clicked on project');
+			//console.log(item.attr('id'));
+			menuTree.update([{name:'Processors', _id:item.attr('object-id')}], item.attr('id'), 'name', '_id', 'Project:Processor', function(e){
 				
 				api.find('Robot', {'projectId':clickedProject._id, type: 'processor'}, function(err, robots){
 					
-					console.log('clickedProject');
-					console.log(clickedProject);
-					console.log(err);
-					
-					setTimeout(clickDone, 3000);
+					menuTree.update([{name:'Components', _id:item.attr('object-id')}], item.attr('id'), 'name', '_id', 'Project:Component', function(e){
+						
+						api.find('Robot', {'projectId':clickedProject._id, type: 'component'}, function(err, robots){
+							
+							menuTree.update([{name:'Schematics', _id:item.attr('object-id')}], item.attr('id'), 'name', '_id', 'Project:Schematic', function(e){
+								
+								api.find('Schematic', {'projectId':clickedProject._id}, function(err, schematics){
+									
+									menuTree.update([{name:'Flow blueprints', _id:item.attr('object-id')}], item.attr('id'), 'name', '_id', 'Project:Blueprint', function(e){
+										
+										api.find('Blueprint', {'projectId':clickedProject._id}, function(err, blueprints){
+											
+											clickDone();
+											
+										});
+										
+									});
+									
+								});
+								
+							});
+							
+						});
+						
+					});
 					
 				});
 				
 			});
 		}
-		
-		
-		
 	}.bind(this);
 	
 	initializeAccordionMenu('workshop', null, null, projectItemClicked, function(menuTree){
@@ -156,7 +174,13 @@ function initializeAccordionMenu(area, onBeforeItemAdded, onItemAdded, onItemCli
 		if (onItemClicked != null)
 			menuTree.itemClicked = onItemClicked;
 		
-		done(menuTree);
+		menuTree.initialize(function(e){
+			
+			if (!e)
+				done(menuTree);
+			
+		});
+		
 	});
 	
 }
@@ -193,7 +217,7 @@ function newProject()
 {
 	//require(['app'], function (app) {
 		var account_id = '<%- account_id  %>';
-		console.log('new project happening');
+		//console.log('new project happening');
 		basePage.app.modalWindow('<h3 id="myModalLabel">New project</h3>', '/project/create?account_id=' + account_id, 500, 500,'save','Create');
 	//});
 }
@@ -205,8 +229,8 @@ function newObjectAdded(area, type, object, done)
 		require(['jquery', 'tbtree'], function ($, tbtree) {
 		    tbtree('#div_sidemenu_' + area).update([object], null, 'name', '_id', type, function(){
 		    	
-		    	console.log('new project added ');
-		    	console.log(object);
+		    	//console.log('new project added ');
+		    	//console.log(object);
 		    	
 		    	if (done != null)
 		    		done();
