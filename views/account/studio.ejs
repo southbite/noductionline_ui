@@ -16,10 +16,9 @@
 		        	  </a>
 		        	  <ul class="dropdown-menu">
 		        	   	<li><a onclick="newProject()" href="#">Project</a></li>
-		        	   	<li><a onclick="newBlueprint()" href="#">Blueprint</a></li>
-		        	   	<li><a onclick="newProject()" href="#">Processor</a></li>
-		        	   	<li><a onclick="newProject()" href="#">Component</a></li>
+		        	   	<li><a onclick="newRobot()" href="#">Robot</a></li>
 		        	   	<li><a onclick="newSchematic()" href="#">Schematic</a></li>
+		        	   	<li><a onclick="newProcessMap()" href="#">Process Map</a></li>
 		        	  </ul>
 		        	</div>
 	        	</div>
@@ -89,13 +88,18 @@ var workshopMenu;
 
 onReadyAPIEvent = function(api_client)
 {
-	$(window).resize(function() {
-	    $('.content-container').height($(window).height() - 130);
-	});
-	
-	api = api_client;
-	initializeWorkshop();
+	basePage.getSession(function(session){
 		
+		$(window).resize(function() {
+		    $('.content-container').height($(window).height() - 130);
+		});
+		
+		api = api_client;
+		sess = session;
+		initializeWorkshop();
+		
+		
+	});
 	
 }
 
@@ -114,21 +118,21 @@ function initializeWorkshop()
 			// var updateTree = function ($container, tree, items, parentItemID, nameProperty, idProperty, modelType, done) {
 			//console.log('updating tree, clicked on project');
 			//console.log(item.attr('id'));
-			menuTree.update([{name:'Processors', _id:item.attr('object-id')}], item.attr('id'), 'name', '_id', 'Project:Processor', function(e){
+			menuTree.update([{name:'Processors', _id:item.attr('object-id')}], item.attr('id'), 'name', '_id', 'Project:Processor', false, function(e){
 				
 				api.find('Robot', {'projectId':clickedProject._id, type: 'processor'}, function(err, robots){
 					
-					menuTree.update([{name:'Components', _id:item.attr('object-id')}], item.attr('id'), 'name', '_id', 'Project:Component', function(e){
+					menuTree.update([{name:'Components', _id:item.attr('object-id')}], item.attr('id'), 'name', '_id', 'Project:Component', false, function(e){
 						
 						api.find('Robot', {'projectId':clickedProject._id, type: 'component'}, function(err, robots){
 							
-							menuTree.update([{name:'Schematics', _id:item.attr('object-id')}], item.attr('id'), 'name', '_id', 'Project:Schematic', function(e){
+							menuTree.update([{name:'Schematics', _id:item.attr('object-id')}], item.attr('id'), 'name', '_id', 'Project:Schematic', false, function(e){
 								
 								api.find('Schematic', {'projectId':clickedProject._id}, function(err, schematics){
 									
-									menuTree.update([{name:'Flow blueprints', _id:item.attr('object-id')}], item.attr('id'), 'name', '_id', 'Project:Blueprint', function(e){
+									menuTree.update([{name:'Process Maps', _id:item.attr('object-id')}], item.attr('id'), 'name', '_id', 'Project:ProcessMap', false, function(e){
 										
-										api.find('Blueprint', {'projectId':clickedProject._id}, function(err, blueprints){
+										api.find('ProcessMap', {'projectId':clickedProject._id}, function(err, blueprints){
 											
 											clickDone();
 											
@@ -153,7 +157,7 @@ function initializeWorkshop()
 	initializeAccordionMenu('workshop', null, null, projectItemClicked, function(menuTree){
 		
 		api.getAll('Project', function(err, projects){
-			menuTree.update(projects, null, 'name', '_id', 'Project', function(e){
+			menuTree.update(projects, null, 'name', '_id', 'Project', true,  function(e){
 				$(window).trigger('resize');
 			});
 		});
@@ -194,31 +198,46 @@ function getMenuTree(area, done)
 	});
 }
 
-function loadAccordionMenu(menuTree, objects, parentItemID, nameProperty, idProperty, modelType, done)
-{
-	if (onBeforeItemAdded != null)
-		menuTree.beforeItemAdd = onBeforeItemAdded;
-	
-	if (onItemAdded != null)
-		menuTree.itemAdded = onItemAdded;
-	
-	if (onItemClicked != null)
-		menuTree.itemClicked = onItemClicked;
-	
-	menuTree.update(objects, parentItemID, nameProperty, idProperty, modelType, done);
-}
-
 function openTab(url)
 {
 	
 }
 
-function newProject()
+function newRobot()
 {
 	//require(['app'], function (app) {
 		var account_id = '<%- account_id  %>';
 		//console.log('new project happening');
-		basePage.app.modalWindow('<h3 id="myModalLabel">New project</h3>', '/project/create?account_id=' + account_id, 500, 500,'save','Create');
+		basePage.app.modalWindow('<h3 id="myModalLabel">New Robot</h3>', '/robot/create?account_id=' + sess['account']._id, 500, 620,'save','Create');
+	//});
+}
+
+function newProcessMap()
+{
+	//require(['app'], function (app) {
+		var account_id = '<%- account_id  %>';
+		//console.log('new project happening');
+		basePage.app.modalWindow('<h3 id="myModalLabel">New Process Map</h3>', '/processmap/create?account_id=' + sess['account']._id, 500, 500,'save','Create');
+	//});
+}
+
+function newSchematic()
+{
+	//require(['app'], function (app) {
+		var account_id = '<%- account_id  %>';
+		//console.log('new project happening');
+		basePage.app.modalWindow('<h3 id="myModalLabel">New Schematic</h3>', '/schematic/create?account_id=' + sess['account']._id, 500, 500,'save','Create');
+	//});
+}
+
+function newProject()
+{
+	//require(['app'], function (app) {
+		//var account_id = '<%- account_id  %>';
+		//console.log('new project happening');
+		
+	
+		basePage.app.modalWindow('<h3 id="myModalLabel">New Project</h3>', '/project/create?account_id=' + sess['account']._id, 500, 500,'save','Create');
 	//});
 }
 

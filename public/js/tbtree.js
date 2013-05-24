@@ -90,7 +90,7 @@ define(['jquery', 'underscore'], function ($, _) {
   
   
   
-  var updateTree = function ($container, tree, items, parentItemID, nameProperty, idProperty, modelType, done) {
+  var updateTree = function ($container, tree, items, parentItemID, nameProperty, idProperty, modelType, sort, done) {
 	try
 	{
 		var sortAlpha = function(a,b){  
@@ -191,7 +191,11 @@ define(['jquery', 'underscore'], function ($, _) {
 	    	  if (addItem)
 	    	  {
 	    		  //console.log('beforeItemAddEvent true');
-	    		  $(parentItem.find('li'), parentItem).add($li.fadeIn(800)).sort(sortAlpha).appendTo(parentItem);
+	    		  if (sort)
+	    			  $(parentItem.find('li'), parentItem).add($li.fadeIn(800)).sort(sortAlpha).appendTo(parentItem);
+	    		  else
+	    			  $(parentItem.find('li'), parentItem).add($li.fadeIn(800)).appendTo(parentItem);
+	    		  
 	    		  tree.itemAdded($li, tree);
 	    	  }
 	    	  
@@ -347,9 +351,9 @@ define(['jquery', 'underscore'], function ($, _) {
 			done(e);
 		}
 	},
-    update: function (data, parentItemID, nameProperty, idProperty, modelType, done) {
+    update: function (data, parentItemID, nameProperty, idProperty, modelType, sort, done) {
      
-      updateTree(this.treeMenu, this, data, parentItemID, nameProperty, idProperty, modelType, function(e){
+      updateTree(this.treeMenu, this, data, parentItemID, nameProperty, idProperty, modelType, sort, function(e){
     	      done(e);
       }.bind(this));
     },

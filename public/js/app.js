@@ -185,14 +185,14 @@
 				cancelButton = 'Cancel';
 			
 			var modalWindow = "";
-			modalWindow = '<div id="app_model_window" style="width:' + width.toString() + 'px;height:' + height.toString() + 'px" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">';
+			modalWindow = '<div id="app_modal_window" style="width:' + width.toString() + 'px;height:' + height.toString() + 'px" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">';
 			modalWindow += '<div style="width:100%;height:100%;position:relative">';
 			modalWindow += '<div class="modal-header">';
 		    modalWindow += '<button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>';
 		    modalWindow += header;
 			modalWindow += '</div>';
 			modalWindow += '<div class="modal-body">';
-			modalWindow += '<iframe id="modalWindow_frame" src="' + url + '" style="width:100%;height:' + (height - 210) + 'px;border:none"></iframe>';
+			modalWindow += '<iframe id="modalWindow_frame" src="' + url + '" style="width:100%;height:' + (height - 120).toString() + 'px;border:none"></iframe>';
 			modalWindow += '</div>';
 			modalWindow += '<div class="modal-footer" style="position:absolute;bottom:0;width:' + (width - 30).toString() + 'px">';
 			modalWindow += '<button class="btn" data-dismiss="modal" aria-hidden="true">' + cancelButton + '</button>';
@@ -201,10 +201,10 @@
 			modalWindow += '</div>';
 			modalWindow += '</div>';
 			
-			$('body').remove('#app_model_window');
+			$('div').remove('#app_modal_window');
 			$('body').append(modalWindow);
 			
-			$('#app_model_window').modal();
+			$('#app_modal_window').modal();
 		}
     };
     

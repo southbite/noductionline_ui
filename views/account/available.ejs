@@ -25,7 +25,7 @@ function availableClicked(accountId)
 	console.log('available clicked ' + accountId);
 	
 	require(['jquery','underscore'], function($, _){
-		var session = basePage.getSession(function(session){
+		basePage.getSession(function(session){
 			
 			var account = _.findWhere(availableAccounts, {_id:accountId});
 			

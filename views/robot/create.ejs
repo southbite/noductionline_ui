@@ -1,0 +1,102 @@
+<form class="form-horizontal" style="width:100%;height:100%">
+  <div class="control-group">
+    <label class="control-label" for="ctl_project_name">Name</label>
+    <div class="controls">
+    	<input id="ctl_robot_name" class="input-xlarge" type="text" placeholder="Name">
+    </div>
+  </div>
+  <div class="control-group">
+    <label class="control-label" for="ctl_robot_description">Description</label>
+    <div class="controls">
+    	<textarea id="ctl_robot_description" rows="6" class="input-xlarge"></textarea>
+    </div>
+  </div>
+  <div class="control-group">
+	  <label class="control-label" for="ctl_robot_category">Category</label>
+	  <div class="controls">
+	  	<input id="ctl_robot_category" type="text"></textarea>
+	  </div>
+	</div>
+	<div class="control-group">
+	  <label class="control-label" for="ctl_robot_project">Project</label>
+	  <div class="controls">
+	  	<select id="ctl_robot_project" ></select>
+	  </div>
+	</div>
+	<div class="control-group">
+	  <label class="control-label" for="ctl_robot_type">Type</label>
+	  <div class="controls">
+	  	<div class="btn-group" data-toggle="buttons-radio">
+		  <button type="button" class="btn btn-primary">Processor</button>
+		  <button type="button" class="btn btn-primary">Middle</button>
+		</div>
+	  </div>
+	</div>
+</form>
+
+<script>
+
+var api = null;
+var appl = null;
+onReadyAPIEvent = function(api_client, session, app)
+{
+	require(['jquery'], function($){
+		
+		api = api_client;
+		appl = app;
+		api.getModel('Robot', function(e, model){
+			
+			if (!e)
+				console.log(model);
+			else
+				console.log(e);
+			
+		});
+		
+	});
+}
+
+function getObject(control_ids, property_names)
+{
+	var returnObject = {};
+	
+	for (var i = 0; i < control_ids.length;i++)
+	{
+		returnObject[property_names[i]] = $('#' + control_ids[i]).val();
+	}
+
+	return returnObject;
+}
+
+function save()
+{
+	console.log('on save clicked');
+	
+	var newProject = getObject(['ctl_robot_name','ctl_robot_description'],['name','description']);
+	console.log(newProject);
+
+	api.create('Project', newProject, function(err, response){
+		
+		if (!err)
+		{
+			appl.showMessage('Project created successfully', 'info', 2000);
+			
+
+			console.log('newProject');
+			console.log(response);
+			
+			//(area, type, object, done)
+			parent.newObjectAdded('workshop', 'Project', response, function(){
+				parent.basePage.app.modalWindowHide();
+			});
+		}
+		else
+		{
+			appl.showMessage('Project creation failed: ' + err, 'error', 2000);
+		}
+	})
+
+	
+}
+
+</script>
