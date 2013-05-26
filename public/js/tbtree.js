@@ -178,7 +178,7 @@ define(['jquery', 'underscore'], function ($, _) {
 	        .attr('data-path', modelType + '_' + itemId)
 	        .attr('data-state', 'collapsed')
 	        .attr('model-type', modelType)
-	        .attr('object-id', modelType)
+	        .attr('object-id', itemId)
 	        .addClass('branch')
 	        .data('item-data', itemInstance)
 	        .hide();
@@ -259,6 +259,7 @@ define(['jquery', 'underscore'], function ($, _) {
 	        .removeClass(config.icons.collapsed)
 	        .removeClass(config.icons.loading)
 	        .addClass(config.icons.expanded);
+	      
 	      $li.attr('data-state', 'expanded');
 	      $li.addClass('highlighted');
 	  }
@@ -271,6 +272,7 @@ define(['jquery', 'underscore'], function ($, _) {
 	        .removeClass(config.icons.expanded)
 	        .removeClass(config.icons.loading)
 	        .addClass(config.icons.collapsed);
+		  
 	      $li.attr('data-state', 'collapsed');
 	      $li.addClass('highlighted');
 	  }

@@ -1,10 +1,14 @@
 <form class="form-horizontal" style="width:100%;height:100%">
   <div class="control-group">
-    <label class="control-label" for="ctl_project_name">Name</label>
     <div class="controls">
     	<input id="ctl_robot_name" class="input-xlarge" type="text" placeholder="Name">
     </div>
   </div>
+  <div class="control-group">
+	  <div class="controls">
+	  	<input id="ctl_robot_version" class="input-xlarge" type="text" placeholder="Version">
+	  </div>
+	</div>
   <div class="control-group">
     <label class="control-label" for="ctl_robot_description">Description</label>
     <div class="controls">
@@ -12,9 +16,8 @@
     </div>
   </div>
   <div class="control-group">
-	  <label class="control-label" for="ctl_robot_category">Category</label>
 	  <div class="controls">
-	  	<input id="ctl_robot_category" type="text"></textarea>
+	  	<input id="ctl_robot_category" type="text" placeholder="Category"></textarea>
 	  </div>
 	</div>
 	<div class="control-group">
@@ -27,34 +30,57 @@
 	  <label class="control-label" for="ctl_robot_type">Type</label>
 	  <div class="controls">
 	  	<div class="btn-group" data-toggle="buttons-radio">
-		  <button type="button" class="btn btn-primary">Processor</button>
-		  <button type="button" class="btn btn-primary">Middle</button>
+		  <button type="button" class="btn btn-primary active" value="processor">Processor</button>
+		  <button type="button" class="btn btn-primary" value="component">Component</button>
 		</div>
 	  </div>
 	</div>
+	<input type="hidden" name="hid_robotType" id="hid_robotType" value="processor" />
 </form>
 
 <script>
 
 var api = null;
 var appl = null;
+
 onReadyAPIEvent = function(api_client, session, app)
 {
 	require(['jquery'], function($){
 		
 		api = api_client;
 		appl = app;
+		
+		console.log('div.btn-group button');
+		console.log($('div.btn-group button'));
+		
+		$('div.btn-group button').click(function() {
+			 
+			console.log('robot type clicked: ');
+			
+		    $("#robotType").attr('value', $(this).attr('value'));
+
+		    console.log('robot type: ');
+		    console.log($("#robotType").attr('value'));
+			
+		});
+		
 		api.getModel('Robot', function(e, model){
 			
 			if (!e)
-				console.log(model);
+			{
+				api.getAll('Project', function(err, projects){
+					
+					$('#ctl_robot_project').append(appl.renderOptionTags(projects, 'name', '_id', null, 'ASCTXT'));
+					
+				});
+			}
 			else
 				console.log(e);
 			
 		});
 		
 	});
-}
+};
 
 function getObject(control_ids, property_names)
 {
@@ -72,30 +98,30 @@ function save()
 {
 	console.log('on save clicked');
 	
-	var newProject = getObject(['ctl_robot_name','ctl_robot_description'],['name','description']);
-	console.log(newProject);
+	var newRobot = getObject(['ctl_robot_name','ctl_robot_version','ctl_robot_description','ctl_robot_category','ctl_robot_project','hid_robotType'],['name','version','description','category','projectId','robotType']);
+	console.log(newRobot);
 
-	api.create('Project', newProject, function(err, response){
+	api.create('Robot', newRobot, function(err, response){
 		
 		if (!err)
 		{
-			appl.showMessage('Project created successfully', 'info', 2000);
+			appl.showMessage('Robot created successfully', 'info', 2000);
 			
 
-			console.log('newProject');
+			console.log('newRobot');
 			console.log(response);
 			
 			//(area, type, object, done)
-			parent.newObjectAdded('workshop', 'Project', response, function(){
+			parent.newObjectAdded('workshop', 'Robot', response, function(){
+				appl.showMessage('Robot created successfully', 'success', 2000);
 				parent.basePage.app.modalWindowHide();
 			});
 		}
 		else
 		{
-			appl.showMessage('Project creation failed: ' + err, 'error', 2000);
+			appl.showMessage('Robot creation failed: ' + err, 'error', 2000);
 		}
 	})
-
 	
 }
 

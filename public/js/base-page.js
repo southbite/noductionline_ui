@@ -8,8 +8,7 @@ define(['jquery','restful_jquery_adapter','restful_api_client','app', 'bootstrap
     basePage.prototype = {
     	app:null,
     	api:null,
-    	initialize:function()
-		{
+    	initialize:function(){
 			console.log('rest');
 			console.log(rest);
 			

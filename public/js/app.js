@@ -80,6 +80,38 @@
 					return (a[property] < b[property]) ? -1 : (a[property] > b[property]) ? 1 : 0;
 				}
 			}
+			else if (direction == "ASCTXT")
+			{
+				return function (a,b) {
+					
+					var aCompare = a[property];
+					var bCompare = b[property];
+					
+					if (aCompare == null || typeof aCompare === 'undefined')
+						aCompare = "";
+					
+					if (bCompare == null || typeof bCompare === 'undefined')
+						bCompare = "";
+					
+					return (aCompare.toLowerCase() < bCompare.toLowerCase()) ? -1 : (aCompare.toLowerCase() > bCompare.toLowerCase()) ? 1 : 0;
+				}
+			}
+			else if (direction == "DESCTXT")
+			{
+				return function (a,b) {
+					
+					var aCompare = a[property];
+					var bCompare = b[property];
+					
+					if (aCompare == null || typeof aCompare === 'undefined')
+						aCompare = "";
+					
+					if (bCompare == null || typeof bCompare === 'undefined')
+						bCompare = "";
+					
+					return (aCompare.toLowerCase() > bCompare.toLowerCase()) ? -1 : (aCompare.toLowerCase() < bCompare.toLowerCase()) ? 1 : 0;
+				}
+			}
 			else if (direction == "DESC")
 			{
 				return function (a,b) {
@@ -150,12 +182,17 @@
 				return decodeURIComponent(qs[1]);
 			}
 		},
-		renderOptionTags:function(items, textFieldName, idFieldName, selectedId)
+		renderOptionTags:function(items, textFieldName, idFieldName, selectedId, sort)
 		{
 			var optionTags = '';
 			
 			if (idFieldName == null)
 				idFieldName = textFieldName;
+			
+			if (sort != null)
+			{
+				items.sort(this.dynamicSort(textFieldName, sort));
+			}
 			
 			for (var itemIndex in items)
 			{
