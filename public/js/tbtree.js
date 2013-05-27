@@ -124,7 +124,7 @@ define(['jquery', 'underscore'], function ($, _) {
 			//console.log('parentItem');
 			//console.log(parentItem);
 			
-			//console.log('parent is null');
+			console.log('parent is null');
 		}
 		else
 		{
@@ -133,15 +133,15 @@ define(['jquery', 'underscore'], function ($, _) {
 			if (parentItem.length == 0)
 				throw "The parent item with id: " + parentItemID + ", does not exist.";
 			
-			//console.log('parent is not null');
-			//console.log(parentItem);
+			console.log('parent is not null');
+			console.log(parentItem);
 			
 			var parentItemUL = parentItem.find('ul:first-child');
 			
 			if (parentItemUL.length == 0)
 				parentItem.append('<ul id=\'ul' + parentItemID + '\'></ul>');
 			
-			//console.log('appended ul');
+			console.log('appended ul');
 			
 			parentItem = parentItem.find('#ul' + parentItemID);
 			//console.log(parentItem);
@@ -355,6 +355,8 @@ define(['jquery', 'underscore'], function ($, _) {
 	},
     update: function (data, parentItemID, nameProperty, idProperty, modelType, sort, done) {
      
+      console.log('updating...');
+    	
       updateTree(this.treeMenu, this, data, parentItemID, nameProperty, idProperty, modelType, sort, function(e){
     	      done(e);
       }.bind(this));

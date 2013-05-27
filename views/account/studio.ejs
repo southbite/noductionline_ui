@@ -111,26 +111,43 @@ function initializeWorkshop()
 		//console.log('project item was clicked');
 		//console.log(item);
 		
-		var clickedProject = item.data('item-data');
+		
+		
+		if (item.attr('model-type') == 'Project_Processor')
+		{
+			api.find('Robot', {'projectId':item.attr('object-id'), robotType: 'processor'}, function(err, robots){
+				
+				menuTree.update(robots, item.attr('id'), 'name', '_id', 'Robot', true, function(e){
+					
+					console.log('something broke on robot click: ' + e);
+					
+					clickDone();
+					
+				});
+				
+			});
+		}
 		
 		if (item.attr('model-type') == 'Project')
 		{
+			var clickedProject = item.data('item-data');
+			
 			// var updateTree = function ($container, tree, items, parentItemID, nameProperty, idProperty, modelType, done) {
 			//console.log('updating tree, clicked on project');
 			//console.log(item.attr('id'));
-			menuTree.update([{name:'Processors', _id:item.attr('object-id')}], item.attr('id'), 'name', '_id', 'Project:Processor', false, function(e){
+			menuTree.update([{name:'Processors', _id:item.attr('object-id')}], item.attr('id'), 'name', '_id', 'Project_Processor', false, function(e){
 				
 				api.find('Robot', {'projectId':clickedProject._id, type: 'processor'}, function(err, robots){
 					
-					menuTree.update([{name:'Components', _id:item.attr('object-id')}], item.attr('id'), 'name', '_id', 'Project:Component', false, function(e){
+					menuTree.update([{name:'Components', _id:item.attr('object-id')}], item.attr('id'), 'name', '_id', 'Project_Component', false, function(e){
 						
 						api.find('Robot', {'projectId':clickedProject._id, type: 'component'}, function(err, robots){
 							
-							menuTree.update([{name:'Schematics', _id:item.attr('object-id')}], item.attr('id'), 'name', '_id', 'Project:Schematic', false, function(e){
+							menuTree.update([{name:'Schematics', _id:item.attr('object-id')}], item.attr('id'), 'name', '_id', 'Project_Schematic', false, function(e){
 								
 								api.find('Schematic', {'projectId':clickedProject._id}, function(err, schematics){
 									
-									menuTree.update([{name:'Process Maps', _id:item.attr('object-id')}], item.attr('id'), 'name', '_id', 'Project:ProcessMap', false, function(e){
+									menuTree.update([{name:'Process Maps', _id:item.attr('object-id')}], item.attr('id'), 'name', '_id', 'Project_ProcessMap', false, function(e){
 										
 										api.find('ProcessMap', {'projectId':clickedProject._id}, function(err, blueprints){
 											
