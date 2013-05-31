@@ -147,9 +147,9 @@ define(['jquery', 'underscore'], function ($, _) {
 			//console.log(parentItem);
 		}
 			
-	    for (var itemIndex in items) {
+	    for (var itemIndex in items.list) {
 	    
-	      var itemInstance = items[itemIndex];
+	      var itemInstance = items.list[itemIndex];
 	      
 	      ////console.log('itemInstance');
 	      ////console.log(itemInstance);
@@ -181,6 +181,7 @@ define(['jquery', 'underscore'], function ($, _) {
 	        .attr('object-id', itemId)
 	        .addClass('branch')
 	        .data('item-data', itemInstance)
+	        .data('parent-data', items.parent)
 	        .hide();
 	        
 	      $li.find('a').append(itemName);
@@ -354,8 +355,6 @@ define(['jquery', 'underscore'], function ($, _) {
 		}
 	},
     update: function (data, parentItemID, nameProperty, idProperty, modelType, sort, done) {
-     
-      console.log('updating...');
     	
       updateTree(this.treeMenu, this, data, parentItemID, nameProperty, idProperty, modelType, sort, function(e){
     	      done(e);

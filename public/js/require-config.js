@@ -30,7 +30,11 @@ function requireConfig()
 			 'tbtree': {
 			      deps: ['jquery', 'underscore'],
 			      exports: 'tbtree'
-			    }
+			    },
+			 'tabWindow' : {
+				 deps: ['jquery', 'underscore'],
+			      exports: 'tabWindow'
+			 }
 	    }
 	}
 }

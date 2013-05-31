@@ -210,7 +210,7 @@
 		},
 		modalWindowHide:function()
 		{
-			$('#app_model_window').modal('hide');
+			$('#app_modal_window').modal('hide');
 		},
 		modalWindow:function(header, url, width, height, okFunction, okButton, cancelButton)
 		{
