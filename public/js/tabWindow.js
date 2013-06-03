@@ -1,9 +1,22 @@
 define(['jquery', 'underscore'], function ($, _) {
   'use strict';
   
+  var container = null;
+  
   var config = {
    
   };
+  
+  var activateTab = function(key)
+  {
+	  console.log('activate clicked: ' + key);
+	  
+	  container.find('li').attr('class','inactive');
+	  container.find('#li' + key).attr('class','active');
+		
+      container.find('.content-container').find('iframe').css('display','none');
+	  container.find('.content-container').find('#frm_' + key).css('display','block');
+  }
   
   var api = {
 	onBeforeTabAdded:null,
@@ -12,17 +25,7 @@ define(['jquery', 'underscore'], function ($, _) {
 	onTabClickedInternal:function()
 	{
 		
-		
 	},
-	activateTab:function(key)
-	{
-		this.container.find('li').attr('class','inactive');
-		this.container.find('li #li' + key).attr('class','active');
-		
-		this.container.find('.content-container').find('iframe').css('display','none');
-		this.container.find('.content-container').find('#frm_' + key).css('display','block');
-	},
-	container:null,
 	tabs:{},
 	selectTab:function(key, name, url, done)
 	{
@@ -32,10 +35,12 @@ define(['jquery', 'underscore'], function ($, _) {
 			console.log(name);
 			console.log(url);
 
+			console.log('container');
+			console.log(container);
 			
 			if (this.tabs[key] != null)
 			{
-				this.activateTab(key);
+				activateTab(key);
 			}
 			else
 			{
@@ -45,16 +50,22 @@ define(['jquery', 'underscore'], function ($, _) {
 				var $li = $('<li id=li' + key + ' class="active"></li>')
 				.append('<a href="#">' + name + '<button class="close closeTab">X</button>' + '</a>');
 				
+				console.log('appending to ul closeTab');
+				
+				$li.find('a').data('tab-key', key);
+				
+				console.log('appending to ul a');
 				
 				this.tabs[key] = {'name':name, 'url':url};
-				this.container.find('li').attr('class','inactive');
+				container.find('li').attr('class','inactive');
 				
-				console.log(this.container.find('ul'));
+				console.log(container.find('ul'));
 				
-				this.container.find('ul').append($li);
+				container.find('ul').append($li);
 				
-				this.container.find('.content-container').find('iframe').css('display','none');
-				this.container.find('.content-container').append('<iframe src="' + url + '" class="content-frame"></iframe>');
+				container.find('.content-container').find('iframe').css('display','none');
+				container.find('.content-container').append('<iframe id="frm_' + key + '" src="' + url + '" class="content-frame"></iframe>');
+
 			}
 			
 			done();
@@ -67,13 +78,12 @@ define(['jquery', 'underscore'], function ($, _) {
 	},
 	initialize: function(key, url)
 	{
-		var container = $(config.selector);
+		container = $(config.selector);
 		
 		if (container.length == 0)
 			throw "The container identified by selector: " + config.selector + ", does not exist.";
 		
-		this.container = container;
-		this.container.html('');//clear the container
+		container.html('');//clear the container
 		
 		var containerBaseHtml =  '<div class="content-tabheaders">';
 		containerBaseHtml +=  '<ul class="nav nav-tabs">';
@@ -90,7 +100,20 @@ define(['jquery', 'underscore'], function ($, _) {
 
 		containerBaseHtml +=  ' <div class="content-container"></div>';
 		
-		this.container.html(containerBaseHtml);
+		container.html(containerBaseHtml);
+		
+		container.on("click", ".closeTab", function (e) {
+	        e.preventDefault();
+	
+	        console.log('close tab clicked');
+	    });
+		
+		container.on("click", "a", function (e) {
+	        e.preventDefault();
+	
+	        console.log('activate tab clicked');
+	        activateTab($(this).data('tab-key'));
+	    });
 		
 	}
   };
