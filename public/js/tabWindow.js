@@ -52,6 +52,9 @@ define(['jquery', 'underscore'], function ($, _) {
 				console.log(this.container.find('ul'));
 				
 				this.container.find('ul').append($li);
+				
+				this.container.find('.content-container').find('iframe').css('display','none');
+				this.container.find('.content-container').append('<iframe src="' + url + '" class="content-frame"></iframe>');
 			}
 			
 			done();

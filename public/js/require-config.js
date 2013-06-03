@@ -2,7 +2,7 @@ function requireConfig()
 {
 	return {
 		baseUrl:'/js',
-		paths:{'jquery':'jquery-min'},
+		paths:{'jquery':'jquery-min','ace':'ace/ace'},
 		shim: {
 			'jquery': {
 			      exports: '$'
@@ -34,6 +34,13 @@ function requireConfig()
 			 'tabWindow' : {
 				 deps: ['jquery', 'underscore'],
 			      exports: 'tabWindow'
+			 },
+			 'ace' : {
+				 exports: 'ace'
+			 },
+			 'sourceEditor' : {
+				 deps: ['jquery', 'underscore', 'ace'],
+				 exports: 'sourceEditor'
 			 }
 	    }
 	}

@@ -1,0 +1,51 @@
+<style type="text/css" media="screen">
+    #editor { 
+        position: absolute;
+        top: 0;
+        right: 0;
+        bottom: 0;
+        left: 0;
+    }
+</style>
+
+<script>
+
+var api = null;
+var appl = null;
+var sourceEditor = null;
+
+onReadyAPIEvent = function(api_client, session, app)
+{
+	
+	$('html').css('height','100%');
+	$('body').css('height','100%');
+	$('.component_container').css('height','100%');
+	$('#div_editor').css('height','100%');
+	
+	
+	require(['jquery', 'underscore', 'sourceEditor'], function($, _, srcEdit){
+		
+		
+		
+		api = api_client;
+		appl = app;
+		sourceEditor = srcEdit('div_editor');
+		
+		sourceEditor.initialize(function(e){
+			
+			console.log('init happened');
+			if (e)
+				console.log(e);
+			
+		});
+		
+	});
+}
+
+</script>
+
+<div id="div_editor">function foo(items) {
+    var x = "All this is syntax highlighted";
+    return x;
+}</div>
+

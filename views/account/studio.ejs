@@ -129,7 +129,7 @@ function initializeWorkshop()
 				
 				console.log('got tab window');
 				//selectTab:function(key, name, url)
-				tabWindow.selectTab (item.attr('model-type') + "_" + item.attr('object-id'), item.data('parent-data').name + ' ' + item.data('item-data').name, '#blank', function(e){
+				tabWindow.selectTab (item.attr('model-type') + "_" + item.attr('object-id'), item.data('parent-data').name + ' ' + item.data('item-data').name, '/instructionset/edit?_id=' + 'new', function(e){
 					
 					
 				});
