@@ -262,7 +262,7 @@ define(['jquery', 'underscore'], function ($, _) {
 	        .addClass(config.icons.expanded);
 	      
 	      $li.attr('data-state', 'expanded');
-	      $li.addClass('highlighted');
+	      //$li.addClass('highlighted');
 	  }
 	  
 	  if (state == 'collapse')
@@ -275,7 +275,7 @@ define(['jquery', 'underscore'], function ($, _) {
 	        .addClass(config.icons.collapsed);
 		  
 	      $li.attr('data-state', 'collapsed');
-	      $li.addClass('highlighted');
+	      //$li.addClass('highlighted');
 	  }
 	  
 	  if (state == 'busy')
@@ -304,6 +304,9 @@ define(['jquery', 'underscore'], function ($, _) {
 	itemClicked:function(item, tree, done){
 		
 	},
+	itemExpanded:function(item, tree, done){
+		
+	},
 	treeMenu:null,
 	initialize: function (done){
 	
@@ -311,36 +314,49 @@ define(['jquery', 'underscore'], function ($, _) {
 		{
 			this.treeMenu = $(config.selector).addClass('tbtree');
 			 var itemClickedEvent = this.itemClicked;
+			 var itemExpandedEvent = this.itemExpanded;
 			 var $tree = this.treeMenu;
 			 var $treeAPI = this;
 			 
-			 $tree.on('click', 'li', function (e) {
+			 $tree.on('click', 'a', function (e) {
+				 
+					console.log('item clicked: ');
+					  
+			        var $li = $(this).parent('li');
+			        
+			        console.log($li);
+			        
+			        setLeafState($li, 'busy');
+			        
+			        $tree.find('li').removeClass('highlighted');
+			          	
+			          	// triggerPathEvent($li, 'highlighted');
+			          	//toggleExpandState($li);
+			        
+			        itemClickedEvent($li, $treeAPI , function(){
+			        	 setLeafState($li, 'collapse');
+			        	 $li.addClass('highlighted');
+		  	        }.bind(this));
+			        
+			        return false;
+				 
+			 });
+			 
+			 $tree.on('click', 'i', function (e) {
 			  
-			  	console.log('item clicked: ');
+			  	console.log('item expanded: ');
 			  
-		        var $li = $(this);
+		        var $li = $(this).parent('li');
 		        
 		        console.log($li);
 		        
 		        setLeafState($li, 'busy');
 		        
-		        $tree.find('li').removeClass('highlighted');
-		          	
-		          	// triggerPathEvent($li, 'highlighted');
-		          	//toggleExpandState($li);
-		        
 		        if ($li.attr('prev-data-state') == 'expanded')
 		        		setLeafState($li, 'collapse');
 		        else
 		        {
-		        	itemClickedEvent($li, $treeAPI , function(){
-		        		
-		        		/*
-		  	        	//console.log('item clicked done');
-		  	        	$li.removeClass('ico-loading');
-		  	        	$li.addClass('highlighted');
-		  	        	*/
-		        		
+		        	itemExpandedEvent($li, $treeAPI , function(){
 		  	        	setLeafState($li, 'expand');
 		  	        }.bind(this));
 		        }

@@ -170,3 +170,22 @@ Containers
 	height:100%;
 	border:none;
 }
+
+.editor-buttons {
+	height:36px;
+	padding:2px;
+	position:absolute;
+	right:0px;
+	top:0px;
+	background-color:#f0f0f0;
+	z-index:1000000;
+	border-bottom-left-radius:5px;
+	/*border: 1px solid #e5e5e5;*/
+}
+
+.editor-buttons img {
+	width:32px;
+	height:32px;
+	cursor:pointer;
+	opacity:0.4;
+}

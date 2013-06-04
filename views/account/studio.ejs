@@ -113,12 +113,25 @@ function initializeWorkshop()
 {
 	var projectItemClicked = function(item, menuTree, clickDone)
 	{
+		//Robot_Instructions
 		
-		//console.log('project item was clicked');
-		//console.log(item);
-		
-		console.log("item.attr('model-type')");
-		console.log(item.attr('model-type'));
+		if (item.attr('model-type') == 'Robot_Instructions')
+		{
+			
+			console.log(item.data('parent-data'));
+			
+			getTabWindow(function(tabWindow){
+				
+				console.log('got tab window');
+				//selectTab:function(key, name, url)
+				tabWindow.selectTab (item.attr('model-type') + "_" + item.attr('object-id'), item.data('parent-data').name + ' ' + item.data('item-data').name, '/instructionset/edit?_id=' + 'new', function(e){
+					
+					clickDone();
+					
+				});
+				
+			});
+		}
 		
 		if (item.attr('model-type') == 'Robot_Controls')
 		{
@@ -131,22 +144,31 @@ function initializeWorkshop()
 				//selectTab:function(key, name, url)
 				tabWindow.selectTab (item.attr('model-type') + "_" + item.attr('object-id'), item.data('parent-data').name + ' ' + item.data('item-data').name, '/instructionset/edit?_id=' + 'new', function(e){
 					
+					clickDone();
 					
 				});
 				
 			});
 		}
+	};
+	
+	var projectItemExpanded = function(item, menuTree, clickDone)
+	{
+		
+		//console.log('project item was clicked');
+		//console.log(item);
+		
+		console.log("item.attr('model-type')");
+		console.log(item.attr('model-type'));
+		
+		
 		
 		if (item.attr('model-type') == 'Robot')
 		{
-			menuTree.update({list:[{name:'Properties', _id:item.attr('object-id')}], parent:item.data('item-data')}, item.attr('id'), 'name', '_id', 'Robot_Properties', false, function(e){
+			menuTree.update({list:[{name:'Controls', _id:item.attr('object-id')}], parent:item.data('item-data')}, item.attr('id'), 'name', '_id', 'Robot_Controls', false, function(e){
 				
-				menuTree.update({list:[{name:'Controls', _id:item.attr('object-id')}], parent:item.data('item-data')}, item.attr('id'), 'name', '_id', 'Robot_Controls', false, function(e){
-					
-					menuTree.update({list:[{name:'Instructions', _id:item.attr('object-id')}], parent:item.data('item-data')}, item.attr('id'), 'name', '_id', 'Robot_Instructions', false, function(e){
-						clickDone();
-					});
-					
+				menuTree.update({list:[{name:'Instructions', _id:item.attr('object-id')}], parent:item.data('item-data')}, item.attr('id'), 'name', '_id', 'Robot_Instructions', false, function(e){
+					clickDone();
 				});
 				
 			});
@@ -155,8 +177,6 @@ function initializeWorkshop()
 		
 		if (item.attr('model-type') == 'Project_Processor')
 		{
-			
-			
 			api.find('Robot', {'projectId':item.attr('object-id'), robotType: 'processor'}, function(err, robots){
 				
 				menuTree.update({list:robots, parent:item.data('item-data')}, item.attr('id'), 'name', '_id', 'Robot', true, function(e){
@@ -174,27 +194,23 @@ function initializeWorkshop()
 			//console.log('updating tree, clicked on project');
 			//console.log(item.attr('id'));
 			
-			menuTree.update({list:[{name:'Properties', _id:item.attr('object-id')}], parent:item.data('item-data')}, item.attr('id'), 'name', '_id', 'Project_Properties', false, function(e){
+			menuTree.update({list:[{name:'Processors', _id:item.attr('object-id')}], parent:item.data('item-data')}, item.attr('id'), 'name', '_id', 'Project_Processor', false, function(e){
 				
-				menuTree.update({list:[{name:'Processors', _id:item.attr('object-id')}], parent:item.data('item-data')}, item.attr('id'), 'name', '_id', 'Project_Processor', false, function(e){
+				api.find('Robot', {'projectId':clickedProject._id, type: 'processor'}, function(err, robots){
 					
-					api.find('Robot', {'projectId':clickedProject._id, type: 'processor'}, function(err, robots){
+					menuTree.update({list:[{name:'Components', _id:item.attr('object-id')}], parent:item.data('item-data')}, item.attr('id'), 'name', '_id', 'Project_Component', false, function(e){
 						
-						menuTree.update({list:[{name:'Components', _id:item.attr('object-id')}], parent:item.data('item-data')}, item.attr('id'), 'name', '_id', 'Project_Component', false, function(e){
+						api.find('Robot', {'projectId':clickedProject._id, type: 'component'}, function(err, robots){
 							
-							api.find('Robot', {'projectId':clickedProject._id, type: 'component'}, function(err, robots){
+							menuTree.update({list:[{name:'Schematics', _id:item.attr('object-id')}], parent:item.data('item-data')}, item.attr('id'), 'name', '_id', 'Project_Schematic', false, function(e){
 								
-								menuTree.update({list:[{name:'Schematics', _id:item.attr('object-id')}], parent:item.data('item-data')}, item.attr('id'), 'name', '_id', 'Project_Schematic', false, function(e){
+								api.find('Schematic', {'projectId':clickedProject._id}, function(err, schematics){
 									
-									api.find('Schematic', {'projectId':clickedProject._id}, function(err, schematics){
+									menuTree.update({list:[{name:'Process Maps', _id:item.attr('object-id')}], parent:item.data('item-data')}, item.attr('id'), 'name', '_id', 'Project_ProcessMap', false, function(e){
 										
-										menuTree.update({list:[{name:'Process Maps', _id:item.attr('object-id')}], parent:item.data('item-data')}, item.attr('id'), 'name', '_id', 'Project_ProcessMap', false, function(e){
+										api.find('ProcessMap', {'projectId':clickedProject._id}, function(err, blueprints){
 											
-											api.find('ProcessMap', {'projectId':clickedProject._id}, function(err, blueprints){
-												
-												clickDone();
-												
-											});
+											clickDone();
 											
 										});
 										
@@ -211,6 +227,7 @@ function initializeWorkshop()
 				});
 				
 			});
+				
 		}
 	}.bind(this);
 	
@@ -218,7 +235,7 @@ function initializeWorkshop()
 		
 		if (!e)
 		{
-			initializeAccordionMenu('workshop', null, null, projectItemClicked, function(menuTree){
+			initializeAccordionMenu('workshop', null, null, projectItemClicked, projectItemExpanded, function(menuTree){
 				
 				api.getAll('Project', function(err, projects){
 					menuTree.update({list:projects, parent:null}, null, 'name', '_id', 'Project', true,  function(e){
@@ -259,7 +276,7 @@ function initializeTabWindow(onBeforeTabAdded, onTabAdded, onTabClicked, done)
 	}
 }
 
-function initializeAccordionMenu(area, onBeforeItemAdded, onItemAdded, onItemClicked, done)
+function initializeAccordionMenu(area, onBeforeItemAdded, onItemAdded, onItemClicked, onItemExpanded, done)
 {
 	getMenuTree(area, function(menuTree){
 		
@@ -271,6 +288,9 @@ function initializeAccordionMenu(area, onBeforeItemAdded, onItemAdded, onItemCli
 		
 		if (onItemClicked != null)
 			menuTree.itemClicked = onItemClicked;
+		
+		if (onItemExpanded != null)
+			menuTree.itemExpanded = onItemExpanded;
 		
 		menuTree.initialize(function(e){
 			

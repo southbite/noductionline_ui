@@ -2627,6 +2627,7 @@ table th[class*="span"],
 
 .icon-chevron-right {
   background-position: -456px -72px;
+  opacity:0.4;
 }
 
 .icon-plus-sign {
@@ -2764,6 +2765,7 @@ table th[class*="span"],
 
 .icon-chevron-down {
   background-position: -313px -119px;
+  opacity:0.4;
 }
 
 .icon-retweet {

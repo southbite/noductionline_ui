@@ -10,6 +10,10 @@
 
 <script>
 
+/*
+ *
+ */
+
 var api = null;
 var appl = null;
 var sourceEditor = null;
@@ -22,17 +26,22 @@ onReadyAPIEvent = function(api_client, session, app)
 	$('.component_container').css('height','100%');
 	$('#div_editor').css('height','100%');
 	
+	var default_code = '<%- default_code  %>';
+	var mode = '<%- mode  %>';
+	var deserialize = <%- deserialize  %>;
 	
 	require(['jquery', 'underscore', 'sourceEditor'], function($, _, srcEdit){
-		
-		
 		
 		api = api_client;
 		appl = app;
 		sourceEditor = srcEdit('div_editor');
 		
-		sourceEditor.initialize(function(e){
+		console.log('default_code');
+		console.log(default_code);
+		
+		sourceEditor.initialize(default_code, mode, deserialize, function(e){
 			
+			$('#div_editor').css('display','block')
 			console.log('init happened');
 			if (e)
 				console.log(e);
@@ -43,9 +52,14 @@ onReadyAPIEvent = function(api_client, session, app)
 }
 
 </script>
-
-<div id="div_editor">function foo(items) {
-    var x = "All this is syntax highlighted";
-    return x;
-}</div>
+<span class='editor-buttons'>
+	<img src='/images/save32.png' alt='save'/>
+	<img src='/images/tag32.png' alt='tag'/>
+	<img src='/images/search32.png' alt='search'/>
+	<img src='/images/versioncontrol32.png' alt='version control'/>
+	<img src='/images/trash32.png' alt='delete'/>
+</span>
+<div id="div_editor" style="display:none">
+	
+</div>
 

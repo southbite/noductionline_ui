@@ -6,18 +6,50 @@ define(['jquery', 'ace'], function ($, ace) {
 	
 	 var api = {
 		editor:null,
-		initialize:function(done){
+		setSource:function(content, deserialize)
+		{
+			var deserializedContent = content;
+			if (deserialize)
+				deserializedContent = decodeURIComponent(content);
+			
+			this.editor.setValue(deserializedContent);
+		},
+		getSource:function(serialize)
+		{
+			
+		},
+		initialize:function(source, mode, deserialize, done){
 			try
 			{
-				editor = ace.edit(config.selector);
+				
+				
+				this.editor = ace.edit(config.selector);
+				
+				if (source == null)
+					source = '/*ADD CODE HERE*/';
+				
+				if (mode == null)
+					mode = 'javascript';
+				
+				if (deserialize == null)
+					deserialize = false;
+				
 				/*
 				editor.setTheme("ace/theme/mono_industrial");
 				editor.getSession().setMode("ace/mode/javascript");
 				*/
 				//editor.renderer.setTheme("ace/theme/mono_industrial");
-				editor.getSession().setMode("ace/mode/javascript");
+				this.editor.getSession().setMode("ace/mode/" + mode);
 				
-				editor.resize(true);
+				console.log('setting source');
+				
+				console.log(this);
+				
+				this.setSource(source, deserialize);
+				
+				console.log('source set');
+				
+				//editor.resize(true);
 				
 				done();
 			}
