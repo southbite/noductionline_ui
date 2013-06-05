@@ -56,11 +56,12 @@ onReadyAPIEvent = function(api_client, session, app)
 		$('div.btn-group button').click(function() {
 			 
 			console.log('robot type clicked: ');
+			console.log($(this).attr('value'));
 			
-		    $("#robotType").attr('value', $(this).attr('value'));
+		    $("#hid_robotType").attr('value', $(this).attr('value'));
 
 		    console.log('robot type: ');
-		    console.log($("#robotType").attr('value'));
+		    console.log($("#hid_robotType").attr('value'));
 			
 		});
 		
@@ -70,7 +71,11 @@ onReadyAPIEvent = function(api_client, session, app)
 			{
 				api.getAll('Project', function(err, projects){
 					
-					$('#ctl_robot_project').append(appl.renderOptionTags(projects, 'name', '_id', null, 'ASCTXT'));
+					var projectId = appl.getQuerystring('projectId', null);
+					
+					console.log('got projectId' + projectId);
+					
+					$('#ctl_robot_project').append(appl.renderOptionTags(projects, 'name', '_id', projectId, 'ASCTXT'));
 					
 				});
 			}

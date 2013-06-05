@@ -17,6 +17,13 @@
 var api = null;
 var appl = null;
 var sourceEditor = null;
+var parentId = '<%- parentId  %>';
+var _id = '<%- _id  %>';
+
+var save = function()
+{
+	
+}
 
 onReadyAPIEvent = function(api_client, session, app)
 {
@@ -26,7 +33,7 @@ onReadyAPIEvent = function(api_client, session, app)
 	$('.component_container').css('height','100%');
 	$('#div_editor').css('height','100%');
 	
-	var default_code = '<%- default_code  %>';
+	var default_code = '<%- code  %>';
 	var mode = '<%- mode  %>';
 	var deserialize = <%- deserialize  %>;
 	
@@ -53,11 +60,11 @@ onReadyAPIEvent = function(api_client, session, app)
 
 </script>
 <span class='editor-buttons'>
-	<img src='/images/save32.png' alt='save'/>
-	<img src='/images/tag32.png' alt='tag'/>
-	<img src='/images/search32.png' alt='search'/>
-	<img src='/images/versioncontrol32.png' alt='version control'/>
-	<img src='/images/trash32.png' alt='delete'/>
+	<img src='/images/save32.png' alt='save' onclick='save()'/>
+	<img src='/images/tag32.png' alt='tag' onclick='tag()'/>
+	<img src='/images/search32.png' alt='search' onclick='search()'/>
+	<img src='/images/versioncontrol32.png' alt='version control' onclick='versionControl()'/>
+	<img src='/images/trash32.png' alt='delete' onclick='delete()'/>
 </span>
 <div id="div_editor" style="display:none">
 	

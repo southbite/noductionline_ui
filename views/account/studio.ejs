@@ -91,6 +91,7 @@
 var api;
 var sess;
 var workshopMenu;
+var currentProjectId;
 
 onReadyAPIEvent = function(api_client)
 {
@@ -115,6 +116,7 @@ function initializeWorkshop()
 	{
 		//Robot_Instructions
 		
+		
 		if (item.attr('model-type') == 'Robot_Instructions')
 		{
 			
@@ -124,7 +126,7 @@ function initializeWorkshop()
 				
 				console.log('got tab window');
 				//selectTab:function(key, name, url)
-				tabWindow.selectTab (item.attr('model-type') + "_" + item.attr('object-id'), item.data('parent-data').name + ' ' + item.data('item-data').name, '/instructionset/edit?_id=' + 'new', function(e){
+				tabWindow.selectTab (item.attr('model-type') + "_" + item.attr('object-id'), item.data('parent-data').name + ' ' + item.data('item-data').name, '/instructionset/edit?_id=' + 'new' + '&type=robot_instructions', function(e){
 					
 					clickDone();
 					
@@ -142,13 +144,37 @@ function initializeWorkshop()
 				
 				console.log('got tab window');
 				//selectTab:function(key, name, url)
-				tabWindow.selectTab (item.attr('model-type') + "_" + item.attr('object-id'), item.data('parent-data').name + ' ' + item.data('item-data').name, '/instructionset/edit?_id=' + 'new', function(e){
+				tabWindow.selectTab (item.attr('model-type') + "_" + item.attr('object-id'), item.data('parent-data').name + ' ' + item.data('item-data').name, '/instructionset/edit?_id=' + 'new' + '&type=robot_controls', function(e){
 					
 					clickDone();
 					
 				});
 				
 			});
+		}
+		
+		if (item.attr('model-type') == 'Robot_Component')
+		{
+			
+			console.log(item.data('parent-data'));
+			
+			getTabWindow(function(tabWindow){
+				
+				console.log('got tab window');
+				//selectTab:function(key, name, url)
+				tabWindow.selectTab (item.attr('model-type') + "_" + item.attr('object-id'), item.data('parent-data').name + ' ' + item.data('item-data').name, '/instructionset/edit?_id=' + 'new' + '&type=component', function(e){
+					
+					clickDone();
+					
+				});
+				
+			});
+		}
+		
+		if (item.attr('model-type') == 'Project')
+		{
+			currentProjectId = item.attr('object-id');
+			
 		}
 	};
 	
@@ -160,10 +186,9 @@ function initializeWorkshop()
 		
 		console.log("item.attr('model-type')");
 		console.log(item.attr('model-type'));
+
 		
-		
-		
-		if (item.attr('model-type') == 'Robot')
+		if (item.attr('model-type') == 'Robot_Processor')
 		{
 			menuTree.update({list:[{name:'Controls', _id:item.attr('object-id')}], parent:item.data('item-data')}, item.attr('id'), 'name', '_id', 'Robot_Controls', false, function(e){
 				
@@ -179,7 +204,20 @@ function initializeWorkshop()
 		{
 			api.find('Robot', {'projectId':item.attr('object-id'), robotType: 'processor'}, function(err, robots){
 				
-				menuTree.update({list:robots, parent:item.data('item-data')}, item.attr('id'), 'name', '_id', 'Robot', true, function(e){
+				menuTree.update({list:robots, parent:item.data('item-data')}, item.attr('id'), 'name', '_id', 'Robot_Processor', true, function(e){
+					clickDone();
+				});
+				
+			});
+		}
+		
+		if (item.attr('model-type') == 'Project_Component')
+		{
+			currentProjectId = item.attr('object-id');
+			
+			api.find('Robot', {'projectId':item.attr('object-id'), robotType: 'component'}, function(err, robots){
+				
+				menuTree.update({list:robots, parent:item.data('item-data')}, item.attr('id'), 'name', '_id', 'Robot_Component', true, function(e){
 					clickDone();
 				});
 				
@@ -189,6 +227,9 @@ function initializeWorkshop()
 		if (item.attr('model-type') == 'Project')
 		{
 			var clickedProject = item.data('item-data');
+			currentProjectId = item.attr('object-id');
+			
+			console.log('setting proj id: ' + currentProjectId);
 			
 			// var updateTree = function ($container, tree, items, parentItemID, nameProperty, idProperty, modelType, done) {
 			//console.log('updating tree, clicked on project');
@@ -330,7 +371,13 @@ function newRobot()
 	//require(['app'], function (app) {
 		var account_id = '<%- account_id  %>';
 		//console.log('new project happening');
-		basePage.app.modalWindow('<h3 id="myModalLabel">New Robot</h3>', '/robot/create?account_id=' + sess['account']._id, 500, 640,'save','Create');
+		
+		var url = '/robot/create?account_id=' + sess['account']._id;
+		
+		if (currentProjectId != null)
+			url += '&projectId=' + currentProjectId.toString();
+		
+		basePage.app.modalWindow('<h3 id="myModalLabel">New Robot</h3>', url, 500, 640,'save','Create');
 	//});
 }
 

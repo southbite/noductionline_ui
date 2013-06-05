@@ -5,7 +5,7 @@ var controller_helper = require('./controllers/helper');
 exports.execute_controller = function(req, res, done){
 	try
 	{
-		var controller = getController(req.params.controller_name);
+		var controller = getController(req.params.controller_name, req.cookies);
 		var controllerMethod = controller[req.params.controller_method];
 		
 		controllerMethod(req, res, function(e, result){
@@ -38,7 +38,7 @@ function getResponse(status, message, data)
 	return {'status':status, 'message':message, 'data':data};
 }
 
-function getController(controllerName)
+function getController(controllerName, cookies)
 {
 	if (controller_cache[controllerName] == null)
 	{
@@ -49,6 +49,25 @@ function getController(controllerName)
 		controllerInstance.helper = controller_helper;
 		controllerInstance.name = controllerName;
 		controllerInstance.settings = settings;
+		
+		if (cookies['noductionline_session'] != null)
+		{
+			controllerInstance.session = JSON.parse(decodeURIComponent(cookies['noductionline_session']));
+			console.log(controllerInstance.session);
+			
+			var controller_api = require('./controllers/api').client;
+			var controller_adapter = require('./controllers/api_adapter').adapter;
+			
+			controller_api.initialize(controllerInstance.session, controller_adapter);
+			controllerInstance.api = controller_api;
+			
+			console.log(controllerInstance.api);
+		}
+		else
+			controllerInstance.session = null;
+		
+		console.log('cookies');
+		console.log(cookies);
 		
 		for (var methodPointer in baseController)
 		{

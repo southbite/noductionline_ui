@@ -17,6 +17,8 @@ for (var fPointer in helperCode)
 }
 
 app.use(express.bodyParser());
+app.use(express.cookieParser());
+
 app.use(expressLayouts);
 app.use(express.static(__dirname+'/public'));
 app.post('/:controller_name/:controller_method', broker.execute_controller);
