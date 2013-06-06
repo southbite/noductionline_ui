@@ -25,7 +25,7 @@ exports.edit = function(req, res, done){
 		console.log('rendering code editor: ' + _id);
 		console.log(this.settings);
 
-		this.render(res, 'edit', {'_id':_id, 'default_code':code, 'mode':_mode, 'deserialize':_deserialize}, 'layout_modal');
+		this.render(res, 'edit', {'_id':_id, 'code':code, 'mode':_mode, 'deserialize':_deserialize, 'parentId':_parentId}, 'layout_modal');
 	}.bind(this);
 	
 	
