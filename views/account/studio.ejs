@@ -415,7 +415,7 @@ function newObjectAdded(area, type, object, done)
 	if (type == 'Project')
 	{
 		require(['jquery', 'tbtree'], function ($, tbtree) {
-		    tbtree('#div_sidemenu_' + area).update([object], null, 'name', '_id', type, true, function(){
+		    tbtree('#div_sidemenu_' + area).update({list:[object], parent:null}, null, 'name', '_id', type, true, function(){
 		    	
 		    	console.log('new robot added ');
 		    	console.log(object);
@@ -437,7 +437,7 @@ function newObjectAdded(area, type, object, done)
 			if (object.robotType == 'component')
 				parentId = 'Project_Component_' + object.projectId;
 			
-		    tbtree('#div_sidemenu_' + area).update([object], parentId, 'name', '_id', type, true, function(){
+		    tbtree('#div_sidemenu_' + area).update({list:[object], parent:null}, parentId, 'name', '_id', type, true, function(){
 		    	
 		    	console.log('new project added ');
 		    	console.log(object);
