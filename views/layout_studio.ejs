@@ -16,17 +16,16 @@ body,html{
 
 <script>
 
-var IsMessageContainerPage = true;
 var api_url = '<%- api_url  %>';
 var basePage;
 
 require.config(requireConfig());
 
-require(['base-page', 'bootstrap'], function(bp, bootstrap){
+require(['base-page', 'bootstrap', 'app'], function(bp, bootstrap, app){
 	
 	console.log('bootstrap:');
 	console.log(bootstrap);
-	bp.initialize();
+	bp.initialize(app);
 	basePage = bp;
 });
 
@@ -76,6 +75,6 @@ function refreshSessionStatus()
 	</div>
 </div>
 <div id="outer_message_div" class="message_container"><div class="message_container_inner" id="inner_message_div"><table class="message_container_table"><tr><td class="message_container_text">Test Message</td></tr></table>
-</div>
+</div></div>
 </body>
 </html>

@@ -120,13 +120,20 @@ function initializeWorkshop()
 		if (item.attr('model-type') == 'Robot_Instructions')
 		{
 			
+			console.log('parent-data!!!');
 			console.log(item.data('parent-data'));
+			
+			var parentBot = item.data('parent-data');
+			var instructionsetID = 'new';
+			
+			if (parentBot['instructionsSourceCodeId'] != null)
+				instructionsetID = parentBot['instructionsSourceCodeId'];
 			
 			getTabWindow(function(tabWindow){
 				
 				console.log('got tab window');
 				//selectTab:function(key, name, url)
-				tabWindow.selectTab (item.attr('model-type') + "_" + item.attr('object-id'), item.data('parent-data').name + ' ' + item.data('item-data').name, '/instructionset/edit?_id=' + 'new' + '&type=robot_instructions', function(e){
+				tabWindow.selectTab (item.attr('model-type') + "_" + item.attr('object-id'), item.data('parent-data').name + ' ' + item.data('item-data').name, '/instructionset/edit?_id=' + instructionsetID + '&type=robot_instructions&_projectId=' + parentBot.projectId, function(e){
 					
 					clickDone();
 					
@@ -137,14 +144,20 @@ function initializeWorkshop()
 		
 		if (item.attr('model-type') == 'Robot_Controls')
 		{
-			
+			console.log('parent-data!!!');
 			console.log(item.data('parent-data'));
+			
+			var parentBot = item.data('parent-data');
+			var instructionsetID = 'new';
+			
+			if (parentBot['controlsSourceCodeId'] != null)
+				instructionsetID = parentBot['controlsSourceCodeId'];
 			
 			getTabWindow(function(tabWindow){
 				
 				console.log('got tab window');
 				//selectTab:function(key, name, url)
-				tabWindow.selectTab (item.attr('model-type') + "_" + item.attr('object-id'), item.data('parent-data').name + ' ' + item.data('item-data').name, '/instructionset/edit?_id=' + 'new' + '&type=robot_controls', function(e){
+				tabWindow.selectTab (item.attr('model-type') + "_" + item.attr('object-id'), item.data('parent-data').name + ' ' + item.data('item-data').name, '/instructionset/edit?_id=' + instructionsetID + '&type=robot_controls&_projectId=' + parentBot.projectId, function(e){
 					
 					clickDone();
 					

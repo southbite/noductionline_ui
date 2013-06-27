@@ -14,62 +14,6 @@
 
     // prototype
     app.prototype = {
-		showMessage:function(messageText, messageType, fadeDuration)
-		{
-			//console.log("flashing message");
-			//console.log(parent.showMessage);
-			
-			//console.log(parent.parent);
-			console.log('$(document).parent');
-			console.log($(document).parent);
-			console.log($(window));
-			
-			if (window.IsMessageContainerPage != null)
-			{
-				//console.log("flashing message");
-				var $messageDiv = $("#inner_message_div");
-
-				this.hideMessage(0, function(){
-					
-					$(".message_container_text").html(messageText);
-					
-					var messageColor = "#D9E2E1";
-					
-					if (messageType == "warning")
-						messageColor = "#F6F4DA";
-					
-					if (messageType == "error")
-						messageColor = "#DF9496";
-					
-					if (messageType == "success")
-						messageColor = "#bfffbf";
-					
-					$messageDiv.css('left', '400px');
-					$messageDiv.css('background-color', messageColor);
-					
-					$messageDiv.show();
-					
-					$messageDiv.animate({
-					      left: parseInt($messageDiv.css('left'), 10) == 0 ?
-					        -$messageDiv.outerWidth() :
-					        0
-					    }, function(){
-					    	//$(this).delay(delayMilliseconds)
-					    	if (fadeDuration > 0)
-					    		$messageDiv.delay(fadeDuration).fadeOut(1000);
-					    	
-					    }.bind(this));
-					
-				}.bind(this));
-			}
-			else
-				parent.showMessage(messageText, messageType, fadeDuration);
-		},
-		hideMessage:function(fadeDuration, done)
-		{
-			var messageDiv = $("#inner_message_div");
-			messageDiv.hide(fadeDuration, done);
-		},
 		dynamicSort:function(property, direction) {
 			
 			//console.log('sorting: ' + property + ' ' + direction);

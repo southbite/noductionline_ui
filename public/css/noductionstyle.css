@@ -189,3 +189,10 @@ Containers
 	cursor:pointer;
 	opacity:0.4;
 }
+
+#div_session_status {
+	border-left:1px solid #CCC;
+	padding:5px;
+	border-bottom:1px solid #CCC;
+	border-bottom-left-radius:5px
+}

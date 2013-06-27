@@ -16,7 +16,12 @@ define(['jquery', 'ace'], function ($, ace) {
 		},
 		getSource:function(serialize)
 		{
+			var returnSource = this.editor.getValue();
 			
+			if (serialize)
+				returnSource = encodeURIComponent(returnSource).replace(/'/g,"%27");
+			
+			return returnSource;
 		},
 		initialize:function(source, mode, deserialize, done){
 			try

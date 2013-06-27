@@ -24,7 +24,7 @@ var client = {
     				}
     				else
     				{
-    					onResponse(null, body);
+    					onResponse(null, JSON.parse(body));
     				}
     			});
     		},
@@ -50,7 +50,7 @@ var client = {
     				}
     				else
     				{
-    					onResponse(null, body);
+    					onResponse(null, JSON.parse(body));
     				}
     			});
     		},
@@ -69,7 +69,7 @@ var client = {
     				}
     			});
     			*/
-    			
+    			console.log('about to put');
     			this.request.put({url:pURL, body:pBody}, function(e, response, body){
     				if (e)
     				{
@@ -77,7 +77,7 @@ var client = {
     				}
     				else
     				{
-    					onResponse(null, body);
+    					onResponse(null, JSON.parse(body));
     				}
     			});
     		},
@@ -104,7 +104,7 @@ var client = {
     				}
     				else
     				{
-    					onResponse(null, body);
+    					onResponse(null, JSON.parse(body));
     				}
     			});
     		}

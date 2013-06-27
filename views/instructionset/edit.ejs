@@ -10,19 +10,73 @@
 
 <script>
 
+
 /*
- *
- */
+SourceCode:{
+	name: {type:'String'},
+	description: {type:'String'},
+	version: {type:'String'},
+	systemVersion: {type:'String'},
+	parentId: {type:'String'},
+	code: {type:'String'}
+}
+*/
+
 
 var api = null;
 var appl = null;
 var sourceEditor = null;
-var parentId = '<%- parentId  %>';
-var _id = '<%- _id  %>';
+var projectId = '<%- object.projectId  %>';
+var id = '<%- object._id  %>';
+var name = '<%- object.name  %>';
+var description = '<%- object.description  %>';
+var version = '<%- object.version  %>';
+var systemVersion = <%- object.systemVersion  %>;
+var code = '<%- object.code  %>';
+var mode = '<%- mode  %>';
 
-var save = function()
+var save = function(tag)
 {
+	var sourceCode =  getSourceCode();
+	console.log('sourceCode');
+	console.log(sourceCode);
 	
+	
+	if (id != 'new')
+	{
+		console.log('about to update');
+		console.log(api);
+		api.update('SourceCode', sourceCode, function(err, instructions){
+			
+			console.log(err);
+			
+			if (!err){
+				basePage.alert('Source update successful', 'success', 2000);
+			}
+			else
+			{
+				basePage.alert('Source update failed: ' + err, 'error', 2000);
+			}
+		});
+	}
+	else
+	{
+		console.log('id new saving');
+	}
+	
+}
+
+function getSourceCode()
+{
+	return {
+		_id:id,
+		name: name,
+		description: description,
+		version: version,
+		systemVersion: systemVersion,
+		projectId: projectId,
+		code: sourceEditor.getSource(true)
+	}
 }
 
 onReadyAPIEvent = function(api_client, session, app)
@@ -33,9 +87,6 @@ onReadyAPIEvent = function(api_client, session, app)
 	$('.component_container').css('height','100%');
 	$('#div_editor').css('height','100%');
 	
-	var default_code = '<%- code  %>';
-	var mode = '<%- mode  %>';
-	var deserialize = <%- deserialize  %>;
 	
 	require(['jquery', 'underscore', 'sourceEditor'], function($, _, srcEdit){
 		
@@ -43,10 +94,10 @@ onReadyAPIEvent = function(api_client, session, app)
 		appl = app;
 		sourceEditor = srcEdit('div_editor');
 		
-		console.log('default_code');
-		console.log(default_code);
+		console.log('code');
+		console.log(code);
 		
-		sourceEditor.initialize(default_code, mode, deserialize, function(e){
+		sourceEditor.initialize(code, mode, true, function(e){
 			
 			$('#div_editor').css('display','block')
 			console.log('init happened');

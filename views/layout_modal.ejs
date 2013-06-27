@@ -7,14 +7,13 @@
 	
 	<script>
 
-		var IsMessageContainerPage = false;
 		var api_url = '<%- api_url  %>';
 		var basePage;
 	
 		require.config(requireConfig());
 	
-		require(['base-page', 'bootstrap'], function(bp){
-			bp.initialize();
+		require(['base-page', 'bootstrap', 'app'], function(bp, bs, app){
+			bp.initialize(app);
 			basePage = bp;
 		});
 

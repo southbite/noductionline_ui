@@ -207,9 +207,28 @@ define(function () {
 				});
     			
     		},
-    		update:function(type, obj, id, done)
+    		update:function(type, obj, done)
     		{
     			this.validate(true,true);
+    			
+    			this.rest_client.put(this.api_url + '/' + this.session.account._id + '/' + type + '?SESSIONTOKEN=' + this.session_key, obj, function(err, response){
+    				if (!err)
+    				{
+    					console.log(response);
+    					
+    					if (response.status == 'OK')
+    					{
+    						done(null, response.data);
+    					}
+    					else
+    					{
+    						done(response);
+    					}
+    				}
+    				else
+    					done(err);
+    				
+    			});
     			
     		},
     		destroy:function(type, id, done)

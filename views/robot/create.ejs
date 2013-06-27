@@ -43,6 +43,10 @@
 var api = null;
 var appl = null;
 
+var default_instruction_code = '<%-default_instruction_code%>';
+var default_controls_code = '<%-default_controls_code%>';
+var default_components_code = '<%-default_components_code%>';
+
 onReadyAPIEvent = function(api_client, session, app)
 {
 	require(['jquery'], function($){
@@ -102,31 +106,88 @@ function getObject(control_ids, property_names)
 function save()
 {
 	console.log('on save clicked');
+	var projectId = appl.getQuerystring('projectId', null);
 	
 	var newRobot = getObject(['ctl_robot_name','ctl_robot_version','ctl_robot_description','ctl_robot_category','ctl_robot_project','hid_robotType'],['name','version','description','category','projectId','robotType']);
 	console.log(newRobot);
 
-	api.create('Robot', newRobot, function(err, response){
+	var instructionsCodeID = null;
+	var controlsCodeID = null;
+	
+	var instructionsCode = {
+	    	name: 'Instructions',
+	    	description: 'Instruction code for ' + $('#ctl_robot_name').val(),
+	    	version: '0.0.0',
+	    	projectId: projectId,
+	    	code: default_instruction_code
+	    }
+	
+	var controlsCode = {
+	    	name: 'Controls',
+	    	description: 'Controls code for ' + $('#ctl_robot_name').val(),
+	    	version: '0.0.0',
+	    	projectId: projectId,
+	    	code: default_controls_code
+	    }
+	
+	api.create('SourceCode', instructionsCode, function(err, instructions){
 		
 		if (!err)
 		{
-			appl.showMessage('Robot created successfully', 'info', 2000);
+			newRobot['instructionsSourceCodeId'] = instructions._id;
 			
-
-			console.log('newRobot');
-			console.log(response);
-			
-			//(area, type, object, done)
-			parent.newObjectAdded('workshop', 'Robot', response, function(){
-				appl.showMessage('Robot created successfully', 'success', 2000);
-				parent.basePage.app.modalWindowHide();
+			api.create('SourceCode', controlsCode, function(err, controls){
+				
+				if (!err)
+				{
+					newRobot['controlsSourceCodeId'] = controls._id;
+					
+					api.create('Robot', newRobot, function(err, response){
+						
+						if (!err)
+						{
+							/*
+							SourceCode:{
+						    	name: {type:'String'},
+						    	description: {type:'String'},
+						    	version: {type:'String'},
+						    	systemVersion: {type:'String'},
+						    	parentId: {type:'String'},
+						    	code: {type:'String'}
+						    }
+							*/
+									
+							console.log('newRobot');
+							console.log(response);
+							
+							//(area, type, object, done)
+							parent.newObjectAdded('workshop', 'Robot', response, function(){
+								appl.showMessage('Robot created successfully', 'success', 2000);
+								parent.basePage.app.modalWindowHide();
+							});
+						}
+						else
+						{
+							appl.showMessage('Robot creation failed: ' + err, 'error', 2000);
+						}
+					});
+				}
+				else
+				{
+					appl.showMessage('Robot creation failed: ' + err, 'error', 2000);
+				}
+				
 			});
 		}
 		else
 		{
 			appl.showMessage('Robot creation failed: ' + err, 'error', 2000);
 		}
-	})
+		
+	});
+	
+	
+	
 	
 }
 

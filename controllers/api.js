@@ -161,16 +161,21 @@ var restful_api_client = { api_url:'',
 		this.validate(true, true);
 		
 		this.rest_client.get(this.api_url + '/' + this.session.account._id + '/' + type + '/' + id + '?SESSIONTOKEN=' + this.session_key, function(err, response){
-			
 			if (!err)
 			{
-				console.log(response);
 				if (response.status == 'OK')
 				{
+					console.log('getById worked');
 					done(null, response.data);
 				}
 				else
 				{
+					console.log('getById failed');
+					console.log(response);
+					console.log(JSON.parse(response).status);
+					
+					console.log(response.data);
+					console.log(response.status);
 					done(response);
 				}
 			}
@@ -207,6 +212,27 @@ var restful_api_client = { api_url:'',
 	update:function(type, obj, id, done)
 	{
 		this.validate(true,true);
+		
+		console.log('updating');
+		
+		this.rest_client.put(this.api_url + '/' + this.session.account._id + '/' + type + '?SESSIONTOKEN=' + this.session_key, obj, function(err, response){
+			if (!err)
+			{
+				console.log(response);
+				
+				if (response.status == 'OK')
+				{
+					done(null, response.data);
+				}
+				else
+				{
+					done(response);
+				}
+			}
+			else
+				done(err);
+			
+		});
 		
 	},
 	destroy:function(type, id, done)

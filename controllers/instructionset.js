@@ -2,30 +2,33 @@
 exports.edit = function(req, res, done){
 	
 	var _id = req.query['_id'];
-	var _parentId = req.query['_parentid']; // parent robot id
+	var _projectId = req.query['_projectId']; 
+	
+	console.log('_projectId');
+	console.log(_projectId);
+	
 	var type = req.query['type'];
 	
-	var default_code = this.settings.getSetting('defaultInstructionsJavascript');
-	var mode = 'javascript';
-	var deserialize = true;
+	var _default_code = this.settings.getSetting('defaultInstructionsJavascript');
+	var _mode = 'javascript';
 	
 	if (type == 'robot_controls')
 	{
-		default_code = this.settings.getSetting('defaultControlsJavascript');
-		mode = 'html';
+		_default_code = this.settings.getSetting('defaultControlsJavascript');
+		_mode = 'html';
 	}
 	
 	if (type == 'component')
 	{
-		default_code = this.settings.getSetting('defaultComponentJavascript');
+		_default_code = this.settings.getSetting('defaultComponentJavascript');
 	}
 	
-	var renderInstructionSet = function(code, _mode, _deserialize)
+	var renderInstructionSet = function(object, mode)
 	{
-		console.log('rendering code editor: ' + _id);
-		console.log(this.settings);
-
-		this.render(res, 'edit', {'_id':_id, 'code':code, 'mode':_mode, 'deserialize':_deserialize, 'parentId':_parentId}, 'layout_modal');
+		
+		object['projectId'] = _projectId;
+		
+		this.render(res, 'edit', {object:object, mode:mode}, 'layout_modal');
 	}.bind(this);
 	
 	
@@ -33,9 +36,14 @@ exports.edit = function(req, res, done){
 	{
 		this.api.getById('SourceCode', _id, function(e, response){
 			//we load the fetched code here
-			renderInstructionSet(response.code, mode, deserialize);
+			
+			console.log('Fetched source code');
+			console.log(response);
+			
+			renderInstructionSet(response, _mode);
 		});
 		
+		/*
 		//we need to pull the code out of the api here
 		var request = require('request');
 		
@@ -51,11 +59,12 @@ exports.edit = function(req, res, done){
 			res.redirect('/auth/login');
 			
 		}.bind(this));
+	*/
 	}
 	else
 	{
 		//we load the default code here
-		renderInstructionSet(default_code, mode, deserialize);
+		renderInstructionSet({_id:'new', name:'', version:'', description:'', systemVersion:0, projectId:_projectId, code:_default_code}, mode);
 	}
 	
 }.bind(this);

@@ -13,10 +13,33 @@
 	
 	require.config(requireConfig());
 	
-	require(['base-page', 'bootstrap'], function(bp){
-		bp.initialize();
+	require(['base-page', 'bootstrap', 'app'], function(bp, bs, app){
+		bp.initialize(app);
 		basePage = bp;
 	});
+	
+	function alert(message, type, fadeduration)
+	{
+		if (window.parent != null)
+			window.parent.alert(message, type, fadeduration);
+		else
+		{
+			$('.alert').hide(10, function(){
+				var alertClass = 'alert alert-' + type;
+				var alertHeader = type.toUpperCase();
+				
+				if (type == 'warning')
+					alertClass = 'alert';
+				
+				var alertHtml = '<div style="position:absolute;bottom:5px;right:5px" class="' + alertClass + '">'; 
+				alertHtml += '<a class="close" data-dismiss="alert">×</a>';
+				alertHtml += '  <strong>' + alertHeader + '</strong>' + message; 
+				alertHtml += '</div>';
+					
+				$(body).append(alertHtml);
+			});
+		}
+	}
 
 </script>
 
@@ -118,6 +141,6 @@ body {
 <p>&copy; Southbite Technologies 2013</p>
 </div>
 <div id="outer_message_div" class="message_container"><div class="message_container_inner" id="inner_message_div"><table class="message_container_table"><tr><td class="message_container_text">Test Message</td></tr></table>
-</div>
+</div></div>
 </body>
 </html>
