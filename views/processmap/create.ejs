@@ -1,0 +1,108 @@
+<form class="form-horizontal" style="width:100%;height:100%">
+  <div class="control-group">
+    <div class="controls">
+    	<input id="ctl_processmap_name" class="input-xlarge" type="text" placeholder="Name">
+    </div>
+  </div>
+  <div class="control-group">
+	  <div class="controls">
+	  	<input id="ctl_processmap_version" class="input-xlarge" type="text" placeholder="Version">
+	  </div>
+	</div>
+  <div class="control-group">
+    <label class="control-label" for="ctl_processmap_description">Description</label>
+    <div class="controls">
+    	<textarea id="ctl_processmap_description" rows="6" class="input-xlarge"></textarea>
+    </div>
+  </div>
+	<div class="control-group">
+	  <label class="control-label" for="ctl_processmap_project">Project</label>
+	  <div class="controls">
+	  	<select id="ctl_processmap_project" ></select>
+	  </div>
+	</div>
+</form>
+
+<script>
+
+var api = null;
+var appl = null;
+
+onReadyAPIEvent = function(api_client, session, app)
+{
+	require(['jquery'], function($){
+		
+		api = api_client;
+		appl = app;
+		
+		api.getModel('ProcessMap', function(e, model){
+			
+			if (!e)
+			{
+				api.getAll('Project', function(err, projects){
+					
+					var projectId = appl.getQuerystring('projectId', null);
+					
+					console.log('got projectId' + projectId);
+					
+					$('#ctl_processmap_project').append(appl.renderOptionTags(projects, 'name', '_id', projectId, 'ASCTXT'));
+					
+				});
+			}
+			else
+				console.log(e);
+			
+		});
+		
+	});
+};
+
+function getObject(control_ids, property_names)
+{
+	var returnObject = {};
+	
+	for (var i = 0; i < control_ids.length;i++)
+	{
+		returnObject[property_names[i]] = $('#' + control_ids[i]).val();
+	}
+
+	return returnObject;
+}
+
+function save()
+{
+	console.log('on save clicked');
+	var projectId = appl.getQuerystring('projectId', null);
+	
+	var newProcessMap = getObject(['ctl_processmap_name','ctl_processmap_version','ctl_processmap_description','ctl_processmap_project'],['name','version','description','projectId']);
+	console.log(newProcessMap);
+		
+	api.create('ProcessMap', newProcessMap, function(err, response){
+		
+		if (!err)
+		{
+			
+			console.log('newProcessMap');
+			console.log(response);
+			
+			//(area, type, object, done)
+			parent.newObjectAdded('workshop', 'ProcessMap', response, function(){
+				appl.showMessage('Process Map created successfully', 'success', 2000);
+				parent.basePage.app.modalWindowHide();
+			});
+		}
+		else
+		{
+			console.log('create error');
+			console.log(err);
+			appl.showMessage('Process Map creation failed: ' + err, 'error', 2000);
+		}
+	});
+				
+	
+	
+	
+	
+}
+
+</script>

@@ -146,7 +146,7 @@ define(['jquery', 'underscore'], function ($, _) {
 			parentItem = parentItem.find('#ul' + parentItemID);
 			//console.log(parentItem);
 		}
-			
+		
 	    for (var itemIndex in items.list) {
 	    
 	      var itemInstance = items.list[itemIndex];
@@ -186,6 +186,9 @@ define(['jquery', 'underscore'], function ($, _) {
 	        
 	      $li.find('a').append(itemName);
 	      $li.find('i').first().addClass(config.icons.collapsed);
+	      
+	      if ($('#'  + modelType + '_' + itemId).length > 0)
+	    	  $('#'  + modelType + '_' + itemId).remove();
 	      
 	      tree.beforeItemAdd($li, tree, function(addItem){
 	    	  
